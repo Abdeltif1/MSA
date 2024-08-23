@@ -1,0 +1,17 @@
+admin/
+published_content/
+resources/
+private_content/
+temp*
+*.pdf
+.lastcommit
+.vscode
+markdown_tools/
+**/node_modules/
+.env
+bundle.js
+npm-debug.log
+
+/.idea
+/public
+
