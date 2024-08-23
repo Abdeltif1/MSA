@@ -14,6 +14,49 @@ const getPrayers = async (req, res) => {
     }
 };
 
+const getCurrentTimestamp = () => {
+    return Date.now();
+}
+
+const getUpcomingPrayer = async (req, res) => {
+    try{
+        const url = "https://api.aladhan.com/v1/timingsByCity/23-08-2024?city=Montreal&country=Canada&method=4&adjustment=1";
+        
+        const response = await fetch(url);
+        if(response.ok){
+            const data =await response.json();
+            const prayers = await data.data.timings;
+            const prayerArray = filterPrayerTimes(prayers);
+            const prayerArrStrings= prayerArray.map(timeObj => Object.values(timeObj)[0]);
+            const timeStampsArr = timeStamps(prayerArrStrings);
+            const timeStamp = getCurrentTimestamp();
+            console.log(timeStamp);
+            console.log(timeStampsArr);
+          
+            const upcomingIndex = upcomingPrayerIndex(timeStampsArr, timeStamp);
+            res.status(200).json(prayerArray[upcomingIndex]);
+        }
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({message: err.message});
+    }
+};
+
+const upcomingPrayerIndex = (prayers, currentTime) => {
+        // Sort the array in ascending order
+        prayers.sort((a, b) => a - b);
+
+        for (let i = 0; i < prayers.length - 1; i++) {
+            if (currentTime >= prayers[i] && currentTime <= prayers[i + 1]) {
+                return i+1;
+            }
+        }
+        return 0;
+}
+
+
+
 const getJumaa = async(req, res) => {
     try{
         const url = "https://api.aladhan.com/v1/timingsByCity/23-08-2024?city=Montreal&country=Canada&method=4&adjustment=1";
@@ -31,6 +74,34 @@ const getJumaa = async(req, res) => {
     }
 };
 
+const timeStamps = (timeStrings) => {
+    return timeStrings.map(timeString => {
+        const [hours, minutes] = timeString.split(':').map(Number);
+
+        const now = new Date();
+
+        now.setHours(hours, minutes, 0, 0);
+
+        return now.getTime();
+    });
+}
+
+const filterPrayerTimes = (prayerTimes) => {
+    // Convert the object into an array of key-value pairs
+    const entries = Object.entries(prayerTimes);
+    
+    // Exclude the last 4 elements
+    const filteredEntries = entries
+        .slice(0, -4) // Exclude the last 4 elements
+        .filter((_, index) => index !== 1 && index !== 4); // Exclude the second (index 1) and fifth (index 4) elements
+    
+
+    
+    // Convert the filtered entries back into an array of objects
+    return filteredEntries.map(([key, value]) => ({ [key]: value }));
+}
 
 
-module.exports = {getPrayers, getJumaa};
+
+
+module.exports = {getPrayers, getJumaa, getUpcomingPrayer};
