@@ -18,7 +18,7 @@ export const useQueryParams = () => {
     const method = "4";
     const adjustment = "1";
 
-    setQueryParams(`${date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`);
+    setQueryParams(`?date=${date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`);
   }, []);
 
   return queryParams;
