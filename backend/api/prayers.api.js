@@ -1,6 +1,6 @@
 const getPrayers = async (req, res) => {
     try{
-        const url = "https://api.aladhan.com/v1/timingsByCity/23-08-2024?city=Montreal&country=Canada&method=4&adjustment=1";
+        const url = process.env.PRAYER_API_URL;
         const response = await fetch(url);
         if(response.ok){
             const data =await response.json();
@@ -20,7 +20,7 @@ const getCurrentTimestamp = () => {
 
 const getUpcomingPrayer = async (req, res) => {
     try{
-        const url = "https://api.aladhan.com/v1/timingsByCity/23-08-2024?city=Montreal&country=Canada&method=4&adjustment=1";
+        const url = process.env.PRAYER_API_URL;
         
         const response = await fetch(url);
         if(response.ok){
@@ -59,7 +59,7 @@ const upcomingPrayerIndex = (prayers, currentTime) => {
 
 const getJumaa = async(req, res) => {
     try{
-        const url = "https://api.aladhan.com/v1/timingsByCity/23-08-2024?city=Montreal&country=Canada&method=4&adjustment=1";
+        const url = process.env.PRAYER_API_URL;
         const response = await fetch(url);
         if(response.ok){
             const data = await response.json();

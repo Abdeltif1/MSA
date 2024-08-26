@@ -4,9 +4,11 @@ const cors = require('cors');
 
 const PrayerRouter = require("./routes/prayers.route");
 
+require('dotenv').config();
+
 const app = express();
 
-const port = 3000;
+const port = 5000;
 
 app.use(cors());
 
