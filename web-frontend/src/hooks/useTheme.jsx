@@ -6,12 +6,12 @@ const useTheme = () => {
     useEffect(() => {
         const currentHour = new Date().getHours();
 
-        if (currentHour >= 5 && currentHour < 6) {
+        if (currentHour >= 3 && currentHour < 6) {
             // Sunrise theme
             setTheme({
                 background: 'linear-gradient(to bottom,  rgba(255, 220, 165, 0.5) 0%, rgba(255, 204, 157, 0.5) 100%)',
                 textColor: '#000',
-                globalBackground: 'linear-gradient(to bottom, #82ADDB, #FCE4E4)',
+                globalBackground: 'linear-gradient(to bottom, #82ADDB, #FCE4E4);',
             });
         } else if (currentHour >= 6 && currentHour < 18) {
             // Daytime theme
@@ -20,7 +20,7 @@ const useTheme = () => {
                 textColor: '#000',
                 globalBackground: 'linear-gradient(to bottom, #B7EAFF, #94DFFF)',
             });
-        } else if (currentHour >= 6 && currentHour < 5) {
+        } else if (currentHour >= 18 && currentHour < 21) {
             // Sunset theme
             setTheme({
                 background: 'linear-gradient(to bottom, rgba(255, 220, 165, 0.5) 0%, rgba(255, 204, 157, 0.5) 100%)',
@@ -32,7 +32,7 @@ const useTheme = () => {
             setTheme({
                 background: 'linear-gradient(to bottom, #8C82FF,  rgba(236, 255, 245, 0.2) 100%)',
                 textColor: '#fff',
-                globalBackground: 'linear-gradient(to bottom, #090401, #3F2A4C)',
+                globalBackground: 'linear-gradient(to bottom, #090401 50%, #3F2A4C)',
             });
         }
     }, []);
