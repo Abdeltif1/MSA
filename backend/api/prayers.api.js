@@ -1,8 +1,6 @@
 const getPrayers = async (req, res) => {
     try {
         const { date, city, country, method, adjustment } = req.query;
-        console.log("hello")
-        console.log(process.env.PRAYER_URL_API)
         const apiUrl = `${process.env.PRAYER_URL_API}/${date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
         const response = await fetch(apiUrl);
         if (response.ok) {
