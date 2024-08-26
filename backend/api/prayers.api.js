@@ -7,6 +7,7 @@ const getPrayers = async (req, res) => {
             const data = await response.json();
             const prayers = await data.data.timings;
             const prayerArray = filterPrayerTimes(prayers);
+            prayerArray.push(["Jumaa", prayerArray[1][1]]);
             res.status(200).json(prayerArray);
         }
     }
