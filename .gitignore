@@ -11,7 +11,7 @@ markdown_tools/
 .env
 bundle.js
 npm-debug.log
-
+**/.env
 /.idea
 /public
 
