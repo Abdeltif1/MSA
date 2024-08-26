@@ -6,7 +6,8 @@ const getPrayers = async (req, res) => {
         if (response.ok) {
             const data = await response.json();
             const prayers = await data.data.timings;
-            res.status(200).json(prayers);
+            const prayerArray = filterPrayerTimes(prayers);
+            res.status(200).json(prayerArray);
         }
     }
     catch (err) {
@@ -95,8 +96,6 @@ const filterPrayerTimes = (prayerTimes) => {
     const filteredEntries = entries
         .slice(0, -4) // Exclude the last 4 elements
         .filter((_, index) => index !== 1 && index !== 4); // Exclude the second (index 1) and fifth (index 4) elements
-
-
 
     // Convert the filtered entries back into an array of objects
     return filteredEntries.map(([key, value]) => ({ [key]: value }));
