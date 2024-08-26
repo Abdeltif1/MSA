@@ -14,10 +14,12 @@ app.use(express.json());
 
 app.use("/api/prayers", PrayerRouter);
 
+
+
 app.get('/', (req, res) => {
   res.send('MSA app!')
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Msa app listening on port ${port}`)
 })
