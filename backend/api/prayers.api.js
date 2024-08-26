@@ -77,7 +77,6 @@ const getCurrentTimestamp = () => {
 }
 
 
-
 const timeStamps = (timeStrings) => {
     return timeStrings.map(timeString => {
         const [hours, minutes] = timeString.split(':').map(Number);
