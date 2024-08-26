@@ -43,8 +43,7 @@ const getUpcomingPrayer = async (req, res) => {
             const data = await response.json();
             const prayers = await data.data.timings;
             const prayerArray = filterPrayerTimes(prayers);
-            const prayerArrStrings = prayerArray.map(timeObj => Object.values(timeObj)[0]);
-            const timeStampsArr = timeStamps(prayerArrStrings);
+            const timeStampsArr = timeStamps(prayerArray);
             const timeStamp = getCurrentTimestamp();
 
 
@@ -78,7 +77,7 @@ const getCurrentTimestamp = () => {
 
 const timeStamps = (timeStrings) => {
     return timeStrings.map(timeString => {
-        const [hours, minutes] = timeString.split(':').map(Number);
+        const [hours, minutes] = timeString[1].split(':').map(Number);
 
         const now = new Date();
 
@@ -88,18 +87,20 @@ const timeStamps = (timeStrings) => {
     });
 }
 
+
+
 const filterPrayerTimes = (prayerTimes) => {
     // Convert the object into an array of key-value pairs
     const entries = Object.entries(prayerTimes);
 
-    // Exclude the last 4 elements
+    // Exclude the last 4 elements and filter out the second (index 1) and fifth (index 4) elements
     const filteredEntries = entries
-        .slice(0, -4) // Exclude the last 4 elements
-        .filter((_, index) => index !== 1 && index !== 4); // Exclude the second (index 1) and fifth (index 4) elements
+        .filter((_, index) => index !== 1 && index !== 4) // Exclude the second (index 1) and fifth (index 4) elements
+        .slice(0, -4); // Exclude the last 4 elements
 
-    // Convert the filtered entries back into an array of objects
-    return filteredEntries.map(([key, value]) => ({ [key]: value }));
-}
+    // Return the filtered entries as an array of arrays
+    return filteredEntries;
+};
 
 
 
