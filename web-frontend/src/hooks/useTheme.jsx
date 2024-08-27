@@ -22,7 +22,7 @@ const useTheme = () => {
                 globalBackground: 'linear-gradient(to bottom, #B7EAFF, #94DFFF)',
                 path: "Sun.png",
             });
-        } else if (currentHour >= 18 && currentHour < 22) {
+        } else if (currentHour >= 18 && currentHour < 21) {
             // Sunset theme
             setTheme({
                 background: 'linear-gradient(to bottom, rgba(255, 220, 165, 0.5) 0%, rgba(255, 204, 157, 0.5) 100%)',
