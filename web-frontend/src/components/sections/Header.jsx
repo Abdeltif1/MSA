@@ -33,7 +33,9 @@ const Header = ({ title, isSmallScreen, imam, date }) => {
         {!isSmallScreen &&
 
           <RightSide>
-            <Sun />
+            <Sun 
+            path={theme.path}
+            />
             <JumaaPrayerCard />
           </RightSide>
         }

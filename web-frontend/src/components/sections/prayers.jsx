@@ -1,30 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PrayerTimeCard from '../cards/PrayerTimeCard';
+import { useQueryParams } from '../../hooks/useQueryParams';
 
 const Prayers = ({ isSmallScreen }) => {
 
 
-    const [prayers, setPrayers] = useState();
+    const [prayers, setPrayers] = useState([]);
+    const queryParams = useQueryParams();
 
     useEffect(() => {
 
-        const prayers_sample = [
-            { prayer: 'Fajr  الفجر', time: '00:01', iqama: '00:00' },
-            { prayer: 'Zuhr الظهر', time: '00:01', iqama: '00:00' },
-            { prayer: 'Asr العصر', time: '00:00', iqama: '00:00' },
-            { prayer: 'Maghrib المغرب', time: '00:00', iqama: '00:00' },
-            { prayer: 'Isha العشاء', time: '00:00', iqama: '00:00' },
-            { prayer: 'Isha العشاء', time: '00:00', iqama: '00:00' },
-        ];
+        
 
-        if (!isSmallScreen) {
-            prayers_sample.pop();
+        const fetchData = async() => {
+
+        try{
+            const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
+            const url = `${baseUrl}dailyprayers${queryParams}`;
+
+            const response = await fetch(url);
+            const result = await response.json();
+            console.log(result);
+
+
+            if (!isSmallScreen) {
+            result.pop();
+            }
+
+        setPrayers(result)
         }
+        catch (error){
+            console.log('error:', error);
+        }
+    };
 
-        setPrayers(prayers_sample)
+    if (queryParams){
+        fetchData();
+    }
 
-    }, [isSmallScreen]);
+        
+
+    }, [isSmallScreen, queryParams]);
 
 
 
@@ -33,9 +51,9 @@ const Prayers = ({ isSmallScreen }) => {
             {prayers?.map((prayer, index) => (
                 <PrayerTimeCard
                     key={index}
-                    prayer={prayer.prayer}
-                    time={prayer.time}
-                    iqama={prayer.iqama}
+                    prayer={prayer[0]}
+                    time={prayer[1]}
+                    iqama={prayer[1]}
 
                 />
             ))}
