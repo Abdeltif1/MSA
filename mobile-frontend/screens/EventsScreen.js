@@ -11,8 +11,10 @@ const eventsData = {
 };
 
 
-const EventItem = ({ event }) => (
-  <TouchableOpacity style={styles.eventItem}>
+const EventItem = ({ event, navigation }) => (
+  <TouchableOpacity style={styles.eventItem} 
+  onPress={() => navigation.navigate('Event')}
+  >
     <View style={styles.eventHeader}>
       <Text style={styles.eventTitle}>{event.title}</Text>
       {/* <View style={styles.eventBadge}>
@@ -41,7 +43,7 @@ const DateHeader = ({ date }) => (
   </View>
 );
 
-export const MyEventsScreen = () => {
+export const MyEventsScreen = ({navigation}) => {
   const [viewMode, setViewMode] = useState('calendar');
   const [selectedDate, setSelectedDate] = useState(Object.keys(eventsData)[0]);
   const [groupedEvents, setGroupedEvents] = useState({});
@@ -52,7 +54,7 @@ export const MyEventsScreen = () => {
 
   const renderAgendaItem = (item) => (
     <View style={styles.agendaItemContainer}>
-      <EventItem event={item} />
+      <EventItem event={item} navigation={navigation} />
     </View>
   );
 
