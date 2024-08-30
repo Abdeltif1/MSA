@@ -8,7 +8,7 @@ export default {
     platforms: ["ios", "android"],
     version: "0.19.0",
     orientation: "portrait",
-    icon: "./assets/MSA.png",
+    icon: "./assets/MSA.jpg",
     splash: {
       image: "./assets/splash.png",
       resizeMode: "cover",
