@@ -5,14 +5,12 @@ import { Calendar, Clock, MapPin, Users, List, Grid } from 'lucide-react-native'
 
 // Mock data for events
 const eventsData = {
-  '2024-08-20': [{ id: '1', title: 'Friday Prayers', time: '13:00', location: 'Masjid Al-Noor', attendees: 100 }],
-  '2024-08-22': [{ id: '2', title: 'Quran Study Group', time: '17:00', location: 'Community Center', attendees: 20 }],
+  '2024-08-20': [{ id: '1', title: 'Friday Prayers', time: '13:00', location: 'MSA Center', attendees: 100 }],
+  '2024-08-22': [{ id: '2', title: 'BBQ', time: '17:00', location: 'Mont-Royal Park', attendees: 20 }],
   '2024-08-24': [{ id: '3', title: 'Islamic Lecture', time: '19:00', location: 'Masjid Al-Hikmah', attendees: 50 }],
-  '2024-08-27': [{ id: '4', title: 'Eid Celebration Planning', time: '10:00', location: 'Masjid Al-Istiqamah', attendees: 30 }],
-  '2024-08-29': [{ id: '5', title: 'Charity Drive', time: '16:00', location: 'Community Hall', attendees: 60 }],
 };
 
-// EventItem component
+
 const EventItem = ({ event }) => (
   <TouchableOpacity style={styles.eventItem}>
     <View style={styles.eventHeader}>
