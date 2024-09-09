@@ -1,33 +1,21 @@
-import MainLayout from "./components/Layout/MainLayout";
-
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
-
-import useTheme from './hooks/useTheme';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import { AdminPage } from './pages/AdminPage';
+import { PrayerPage } from './pages/PrayerPage';
 
 function App() {
 
-  const theme = useTheme();
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <MainLayout />
-    </ThemeProvider>
+  <Router>
+    <Routes>
+      <Route path="/msa-web-app/" element={<PrayerPage />}/>
+      <Route path="/msa-web-app/admin" element={<AdminPage />} />
+    </Routes>
+  </Router>
 
   );
 }
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    background: ${({ theme }) => theme.globalBackground};
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    margin: 0;
-    padding: 0;
 
-
-  }
-`;
 export default App;
 
 
