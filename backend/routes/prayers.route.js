@@ -1,15 +1,17 @@
 const express = require("express");
 
-const { getPrayers, getJumaa, getUpcomingPrayer } = require("../api/prayers.api");
+const { getPrayers, getJumaah, getUpcomingPrayer, storePrayers } = require("../api/prayers.api");
 
 
-const router = express.Router();
+const PrayerRouter = express.Router();
 
-router.get("/dailyprayers", getPrayers);
+PrayerRouter.get("/dailyprayers", getPrayers);
 
-router.get("/jumaaprayer", getJumaa);
+PrayerRouter.get("/jumaaprayer", getJumaah);
 
-router.get("/upcomingprayer", getUpcomingPrayer);
+PrayerRouter.get("/upcomingprayer", getUpcomingPrayer);
+
+PrayerRouter.post("/storeprayers", storePrayers);
 
 
-module.exports = router;
+module.exports = PrayerRouter;
