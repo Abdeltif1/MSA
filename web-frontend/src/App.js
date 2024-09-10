@@ -7,8 +7,8 @@ function App() {
   return (
   <Router>
     <Routes>
-      <Route path="/msa-web-app/" element={<PrayerPage />}/>
-      <Route path="/msa-web-app/admin" element={<AdminPage />} />
+      <Route path="/" element={<PrayerPage />}/>
+      <Route path="/admin" element={<AdminPage />} />
     </Routes>
   </Router>
 

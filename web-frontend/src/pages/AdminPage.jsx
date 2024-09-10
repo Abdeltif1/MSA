@@ -1,5 +1,9 @@
+ import Sidebar from "../components/Sidebar"
+
 export const AdminPage = () => {
     return (
-        <h1>Admin page</h1>
+        <Sidebar></Sidebar>
+
+        
     )
 }
