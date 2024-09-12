@@ -11,36 +11,36 @@ const Prayers = ({ isSmallScreen }) => {
 
     useEffect(() => {
 
-        
-
-        const fetchData = async() => {
-
-        try{
-            const baseUrl = process.env.REACT_APP_API_BASE_URL;
-
-            const url = `${baseUrl}dailyprayers${queryParams}`;
-
-            const response = await fetch(url);
-            const result = await response.json();
-            console.log(result);
 
 
-            if (!isSmallScreen) {
-            result.pop();
+        const fetchData = async () => {
+
+            try {
+                const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
+                const url = `${baseUrl}dailyprayers${queryParams}`;
+
+                const response = await fetch(url);
+                const result = await response.json();
+                console.log(result);
+
+
+                if (!isSmallScreen) {
+                    result.pop();
+                }
+
+                setPrayers(result)
             }
+            catch (error) {
+                console.log('error:', error);
+            }
+        };
 
-        setPrayers(result)
+        if (queryParams) {
+            fetchData();
         }
-        catch (error){
-            console.log('error:', error);
-        }
-    };
 
-    if (queryParams){
-        fetchData();
-    }
 
-        
 
     }, [isSmallScreen, queryParams]);
 

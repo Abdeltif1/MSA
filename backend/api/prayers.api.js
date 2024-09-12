@@ -174,7 +174,9 @@ const getPrayers = async (req, res) => {
     const response = await fetch(apiUrl);
     if (response.ok) {
       const data = await response.json();
+
       const prayers = await data.data.timings;
+
       const prayerArray = filterPrayerTimes(prayers);
       prayerArray.push(["Jumaa", prayerArray[1][1]]);
       res.status(200).json(prayerArray);
@@ -257,6 +259,7 @@ const filterPrayerTimes = (prayerTimes) => {
   const filteredEntries = entries
     .filter((_, index) => index !== 1 && index !== 4) // Exclude the second (index 1) and fifth (index 4) elements
     .slice(0, -4); // Exclude the last 4 elements
+
 
   // Return the filtered entries as an array of arrays
   return filteredEntries;

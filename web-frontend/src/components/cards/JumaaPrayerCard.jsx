@@ -9,35 +9,35 @@ const JumaaPrayerCard = () => {
     const theme = useTheme();
 
     const [jumaa, setJumaa] = useState("");
-     const queryParams = useQueryParams();
+    const queryParams = useQueryParams();
 
     useEffect(() => {
-    const fetchData = async() => {
+        const fetchData = async () => {
 
-        try{
-            const baseUrl = process.env.REACT_APP_API_BASE_URL;
+            try {
+                const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-            const url = `${baseUrl}jumaaprayer${queryParams}`;
+                const url = `${baseUrl}jumaahprayer${queryParams}`;
 
-            const response = await fetch(url);
-            const result = await response.json();
-            console.log(result);
+                const response = await fetch(url);
+                const result = await response.json();
+                console.log(result);
 
 
-            
 
-        setJumaa(result)
+
+                setJumaa(result)
+            }
+            catch (error) {
+                console.log('error:', error);
+            }
+        };
+
+        if (queryParams) {
+            fetchData();
         }
-        catch (error){
-            console.log('error:', error);
-        }
-    };
 
-    if (queryParams){
-        fetchData();
-    }
 
-        
 
     }, [queryParams]);
 
