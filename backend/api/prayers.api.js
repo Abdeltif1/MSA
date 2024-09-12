@@ -13,9 +13,9 @@ const {
   setDoc,
 } = require('firebase/firestore');;
 
-const data = require("../data/prayers.js");
+const weeklyPrayers = require("../data/prayers.js");
 const imams = require("../data/imams.js");
-const daily = require("../data/daily.js");
+const dailyPrayers = require("../data/daily.js");
 const db = getFirestore(firebase);
 
 /**
@@ -26,7 +26,7 @@ const db = getFirestore(firebase);
 const storeWeeklyPrayers = async (req, res) => {
   try {
     const docRef = doc(db, "prayers", "weekly");
-    await setDoc(docRef, data, { merge: true });
+    await setDoc(docRef, weeklyPrayers, { merge: true });
     res.status(200).send("Prayers added to database");
   } catch (err) {
     console.log(err);
