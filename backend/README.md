@@ -3,7 +3,7 @@ Backend:
 1. cd backend
 2. npm install
 3. node app.js
-4. create .env and put the environment variables:
+4. create .env and put the environment variables:  
     PRAYER_URL_API=<apiurl>  
     #firebase config  
     API_KEY=""  
