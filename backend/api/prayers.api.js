@@ -42,6 +42,7 @@ const storeWeeklyPrayers = async (req, res) => {
 const storeDailyPrayers = async (req, res) => {
   try {
 
+    // const daily = dailyPrayers ;
     const prayers = req.body;
     const docRef = doc(db, "prayers", "daily");
     // await setDoc(docRef, daily, { merge: true });
@@ -63,6 +64,7 @@ const storeDailyPrayers = async (req, res) => {
 const storeImams = async (req, res) => {
 
   try {
+    // const imams = req.body;
     const docRef = doc(db, "prayers", "imams");
     await setDoc(docRef, imams, { merge: true });
     res.status(200).send("Imams are added to database");

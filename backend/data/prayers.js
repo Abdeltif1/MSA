@@ -55,4 +55,4 @@ const weeklyPrayers = {
 
 };
 
-module.exports = data;
+module.exports = weeklyPrayers;

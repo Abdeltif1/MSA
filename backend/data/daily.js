@@ -7,4 +7,4 @@ const dailyPrayers = {
     "Isha": { "Adan": "08:00", "Iqama": "08:15" },
 };
 
-module.exports = data;
+module.exports = dailyPrayers;

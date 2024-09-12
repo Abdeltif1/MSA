@@ -50,4 +50,4 @@ const imams = {
     }
 };
 
-module.exports = data;
+module.exports = imams;
