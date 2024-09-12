@@ -84,7 +84,7 @@ const getDailyPrayers = async (req, res) => {
 
   try {
     const docRef = doc(db, "prayers", "daily");
-    const response = await getDoc(docRef, daily);
+    const response = await getDoc(docRef);
     const prayerArray = convertObjectToArray(response.data());
     res.status(200).send(prayerArray);
 
@@ -282,7 +282,7 @@ const convertObjectToArray = (obj) => {
 
 const getArrayOfTimeStamps = (timeStrings) => {
 
-  console.log(timeStrings);
+
   return timeStrings.map((timeString) => {
     const [hours, minutes] = timeString[1].Iqama.split(":").map(Number);
 

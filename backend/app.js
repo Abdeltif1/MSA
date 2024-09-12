@@ -1,7 +1,12 @@
+
+
+
+
 const express = require('express');
 
 const cors = require('cors');
 
+const { specs, swaggerUi } = require('./swagger');
 
 const PrayerRouter = require('./routes/prayers.route.js');
 
@@ -14,6 +19,7 @@ const app = express();
 
 const port = config.port;
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.use(cors());
 
