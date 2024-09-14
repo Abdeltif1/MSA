@@ -1,6 +1,5 @@
 const firebase = require("../firebase.js");
 
-
 const {
   getFirestore,
   collection,
@@ -15,8 +14,95 @@ const {
 
 const weeklyPrayers = require("../data/prayers.js");
 const imams = require("../data/imams.js");
+const iqama = require("../data/iqama.js");
 const dailyPrayers = require("../data/daily.js");
 const db = getFirestore(firebase);
+
+
+/**
+ * get daily prayers from the API and set iqama an imam
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getDailyData = async (req, res) => {
+
+  try {
+    const { date, city, country, method, adjustment } = req.query;
+
+    const apiUrl = `${process.env.PRAYER_URL_API}/${date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
+    const response = await fetch(apiUrl);
+    if (response.ok) {
+      const data = await response.json();
+
+      const prayers = await data.data.timings;
+
+      const prayerArray = filterPrayerTimes(prayers);
+
+      const iqamaArray = await getIqamaArray();
+
+      const imamObj = await getImamObject(date);
+
+      console.log(imamObj);
+
+      const prayerObject = getPrayerObject(prayerArray, iqamaArray.iqama, imamObj.data);
+      res.status(200).send(prayerObject);
+
+
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
+
+};
+
+/**
+ * Store weekly prayers in the database
+ * @param {*} req 
+ * @param {*} res 
+ */
+const storeMyWeeklyPrayers = async (req, res) => {
+
+  try {
+    const { date, city, country, method, adjustment } = req.query;
+    const apiUrl = `${process.env.PRAYER_URL_API}/${weekly_dates[i].date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
+    const weekly_dates = getWeeklyDates(date);
+
+    for (let i = 0; i < weekly_dates.length; i++) {
+      const apiUrl = `${process.env.PRAYER_URL_API}/${weekly_dates[i].date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
+      const response = await fetch(apiUrl);
+      if (response.ok) {
+        const data = await response.json();
+
+        const prayers = await data.data.timings;
+
+        const prayerArray = filterPrayerTimes(prayers);
+
+        const prayerObject = getPrayerObject(prayerArray);
+
+        weekly_dates[i].data = prayerObject;
+        if (weekly_dates[i].day === "Friday") {
+          weekly_dates[i].data.dhuhr.Khutba = "13:20";
+        }
+      }
+    }
+
+    const docRef = doc(db, "prayers", "my_week");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const existingData = docSnap.data().weekly_dates || [];
+      // const updatedData = [...existingData, ...weekly_dates];
+      await setDoc(docRef, { weekly_dates: weekly_dates }, { merge: true });
+    } else {
+      await setDoc(docRef, { weekly_dates }, { merge: true });
+    }
+    res.status(200).send("Prayers added to database");
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
+}
 
 /**
  * Store weekly prayers in the database
@@ -66,7 +152,16 @@ const storeImams = async (req, res) => {
   try {
     // const imams = req.body;
     const docRef = doc(db, "prayers", "imams");
-    await setDoc(docRef, imams, { merge: true });
+
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const existingData = docSnap.data().weekly_imams || [];
+      // const updatedData = [...existingData, ...weekly_dates];
+      await setDoc(docRef, { weekly_imams: imams }, { merge: true });
+    } else {
+      await setDoc(docRef, { imams }, { merge: true });
+    }
     res.status(200).send("Imams are added to database");
   } catch (err) {
     console.log(err);
@@ -74,6 +169,30 @@ const storeImams = async (req, res) => {
   }
 
 };
+
+const storeIqama = async (req, res) => {
+
+  try {
+    // const imams = req.body;
+    const docRef = doc(db, "prayers", "iqama");
+
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      // const existingData = docSnap.data().iqama_time || [];
+      // const updatedData = [...existingData, ...weekly_dates];
+      await setDoc(docRef, { iqama_time: iqama }, { merge: true });
+    } else {
+      await setDoc(docRef, { iqama }, { merge: true });
+    }
+    res.status(200).send("Iqama Time are added to database");
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
+
+
+}
 
 /**
  * Get daily prayers from the database
@@ -294,5 +413,91 @@ const getArrayOfTimeStamps = (timeStrings) => {
   });
 };
 
+const getWeeklyDates = (date) => {
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const weeklyDates = [];
+  const today = new Date(date);
 
-module.exports = { getPrayers, getUpcomingPrayer, getJumaah, storeWeeklyPrayers, storeImams, storeDailyPrayers, getDailyPrayers, getJumaaPrayer, getNextPrayer, getImam };
+  const day = today.getDay();
+
+  for (let i = 0; i < 7; i++) {
+    const nextDay = new Date(today);
+    nextDay.setDate(today.getDate() + i);
+    weeklyDates.push({ date: nextDay.toISOString().split("T")[0], day: days[(day + i) % 7] });
+  }
+  return weeklyDates;
+}
+
+const getPrayerObject = (prayers, iqamaArray, imamObj) => {
+  const prayerObject = {
+    fajr: { adan: prayers[0][1], iqama: evaluateIqamaTime(prayers[0][1], iqamaArray[0]), imam: imamObj.Fajr },
+    dhuhr: { adan: prayers[1][1], iqama: evaluateIqamaTime(prayers[1][1], iqamaArray[1]), imam: imamObj.Dhuhr },
+    asr: { adan: prayers[2][1], iqama: evaluateIqamaTime(prayers[2][1], iqamaArray[2]), imam: imamObj.Asr },
+    maghrib: { adan: prayers[3][1], iqama: evaluateIqamaTime(prayers[3][1], iqamaArray[3]), imam: imamObj.Maghrib },
+    isha: { adan: prayers[4][1], iqama: evaluateIqamaTime(prayers[4][1], iqamaArray[4]), imam: imamObj.Isha },
+  };
+  return prayerObject;
+}
+
+const getIqamaArray = async () => {
+  const docRef = doc(db, "prayers", "iqama");
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const iqamas = docSnap.data();
+
+    return iqamas;
+  } else {
+    throw new Error("Iqama times not found in the database");
+  }
+}
+
+
+const getImamObject = async (date) => {
+  const docRef = doc(db, "prayers", "imams");
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const imams = docSnap.data();
+    const imamObjectForDate = imams.weekly_imams.find(imam => imam.date === date);
+    return imamObjectForDate;
+  } else {
+    throw new Error("Imams  not found in the database");
+  }
+
+
+}
+
+const evaluateIqamaTime = (prayerTime, iqama) => {
+  const [hours, minutes] = prayerTime.split(":").map(Number);
+  let date = new Date();
+  date.setHours(hours);
+  date.setMinutes(minutes);
+
+  date.setMinutes(date.getMinutes() + 5);
+
+  let newHours = String(date.getHours()).padStart(2, '0');
+  let newMinutes = String(date.getMinutes()).padStart(2, '0');
+
+  let newTime = `${newHours}:${newMinutes}`;
+
+  return newTime;
+
+};
+
+
+module.exports = {
+  getPrayers,
+  getUpcomingPrayer,
+  getJumaah,
+  storeWeeklyPrayers,
+  storeImams,
+  storeDailyPrayers,
+  getDailyPrayers,
+  getJumaaPrayer,
+  getNextPrayer,
+  getImam,
+  storeMyWeeklyPrayers,
+  storeIqama,
+  getDailyData
+};
