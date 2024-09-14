@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import useTheme from '../../hooks/useTheme';
 import { useQueryParams } from '../../hooks/useQueryParams';
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { db } from '../../firebase';
 
 const NextPrayerCard = () => {
@@ -10,8 +10,20 @@ const NextPrayerCard = () => {
   const theme = useTheme();
 
   const [upcoming, setUpcoming] = useState([]);
-  const [iqama, setIqama] = useState();
   const queryParams = useQueryParams();
+
+
+
+   
+
+    //  const listenIqama =  (col, docu) =>{
+    //         onSnapshot(doc(db, col, docu), (doc) => {
+    //           // handleDoc(doc.data());
+    //            console.log(doc.data());
+    //    });
+    //   }
+    //    listenIqama('prayers', 'iqama');
+
 
 
   useEffect(() => {
@@ -30,21 +42,15 @@ const NextPrayerCard = () => {
             return
           }            
 
-          setIqama(result[1]);
-          const listenIqama = (col, docu) =>{
-            const q = query(collection(db, col), where("iqama", "==", docu));
-            const unsubscribe = onSnapshot(q, (snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                if (change.type === "modified") {
-                  console.log("Modified iqama: ", change.doc.data());
-                  }
-    
-              });
-        });
+          
+          
         
-    
-      }
-        listenIqama('prayers', 'iqama');
+      //     const listenIqama = (col, docu) =>{
+      //       onSnapshot(doc(db, col, docu), (doc) => {
+      //         handleDoc(doc.data());
+      //  });
+      // }
+      // listenIqama('prayers', 'iqama');
         setUpcoming(result)
         }
         catch (error){
@@ -55,6 +61,8 @@ const NextPrayerCard = () => {
     if (queryParams){
         fetchData();
     }
+   
+   
 
         
 
@@ -66,7 +74,7 @@ const NextPrayerCard = () => {
         <Text>{upcoming[0]}</Text>
         <Time>{upcoming[1]}</Time>
         <Text>Iqama    الإقامة</Text>
-        <Time>{iqama}</Time>
+        <Time>{upcoming[2]}</Time>
       </Card>
     </ThemeProvider>
   );

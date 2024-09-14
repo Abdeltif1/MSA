@@ -44,7 +44,7 @@ const getDailyData = async (req, res) => {
 
 
 
-      console.log(imamObj);
+      
 
       const prayerObject = getPrayerObject(prayerArray, iqamaArray.iqama, imamObj.data);
       res.status(200).send(prayerObject);
@@ -335,8 +335,11 @@ const getUpcomingPrayer = async (req, res) => {
       const upcomingIndex = upcomingPrayerIndex(timeStampsArr, timeStamp);
       const iqamas = await getIqamaArray();
       const upcoming = prayerArray[upcomingIndex];
-
-      const upcomingIqama = evaluateIqamaTime(upcoming[1], iqamas.iqama[upcomingIndex].value);
+      console.log(Object.values(iqamas.iqama[upcomingIndex])[0]);
+      const upcomingIqama = evaluateIqamaTime(
+        upcoming[1],
+        iqamas.iqama[upcomingIndex]
+      );
 
       upcoming.push(upcomingIqama);
 
@@ -460,8 +463,9 @@ const getIqamaArray = async () => {
 const getImamObject = async (date) => {
   const docRef = doc(db, "prayers", "imams");
   const docSnap = await getDoc(docRef);
-
+  
   if (docSnap.exists()) {
+    
     const imams = docSnap.data();
     const imamObjectForDate = imams.weekly_imams.find(imam => imam.date === date);
     return imamObjectForDate;
@@ -473,12 +477,13 @@ const getImamObject = async (date) => {
 }
 
 const evaluateIqamaTime = (prayerTime, iqama) => {
+  const iqamaTime = Object.values(iqama)[0];
   const [hours, minutes] = prayerTime.split(":").map(Number);
   let date = new Date();
   date.setHours(hours);
   date.setMinutes(minutes);
 
-  date.setMinutes(date.getMinutes() + 5);
+  date.setMinutes(date.getMinutes() + iqamaTime);
 
   let newHours = String(date.getHours()).padStart(2, '0');
   let newMinutes = String(date.getMinutes()).padStart(2, '0');
