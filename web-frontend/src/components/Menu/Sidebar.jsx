@@ -14,21 +14,21 @@ export default function Sidebar() {
         <div style={{ display: 'flex', height: '100vh', overflow: 'scroll initial' }}>
       <CDBSidebar textColor="#fff" backgroundColor="#333">
         <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-          <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
+          <a href="/admin/" className="text-decoration-none" style={{ color: 'inherit' }}>
             Admin Page
           </a>
         </CDBSidebarHeader>
 
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
-            <NavLink exact to="/" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="columns">Dashboard</CDBSidebarMenuItem>
+            <NavLink to="/" activeClassName="activeClicked">
+              <CDBSidebarMenuItem icon="columns">Prayers View</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/tables" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="table">Event management</CDBSidebarMenuItem>
+            <NavLink to="/admin/imam-management" activeClassName="activeClicked">
+              <CDBSidebarMenuItem icon="table">Imam Management</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/profile" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="user">To be added</CDBSidebarMenuItem>
+            <NavLink exact to="/admin/iqama-management" activeClassName="activeClicked">
+              <CDBSidebarMenuItem icon="user">Iqama Management</CDBSidebarMenuItem>
             </NavLink>
             <NavLink exact to="/analytics" activeClassName="activeClicked">
               <CDBSidebarMenuItem icon="chart-line">To be added</CDBSidebarMenuItem>
