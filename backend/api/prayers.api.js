@@ -42,6 +42,8 @@ const getDailyData = async (req, res) => {
 
       const imamObj = await getImamObject(date);
 
+
+
       console.log(imamObj);
 
       const prayerObject = getPrayerObject(prayerArray, iqamaArray.iqama, imamObj.data);
@@ -293,9 +295,7 @@ const getPrayers = async (req, res) => {
     const response = await fetch(apiUrl);
     if (response.ok) {
       const data = await response.json();
-
       const prayers = await data.data.timings;
-
       const prayerArray = filterPrayerTimes(prayers);
       prayerArray.push(["Jumaa", prayerArray[1][1]]);
       res.status(200).json(prayerArray);
@@ -332,9 +332,15 @@ const getUpcomingPrayer = async (req, res) => {
       const prayerArray = filterPrayerTimes(prayers);
       const timeStampsArr = timeStamps(prayerArray);
       const timeStamp = getCurrentTimestamp();
-
       const upcomingIndex = upcomingPrayerIndex(timeStampsArr, timeStamp);
-      res.status(200).json(prayerArray[upcomingIndex]);
+      const iqamas = await getIqamaArray();
+      const upcoming = prayerArray[upcomingIndex];
+
+      const upcomingIqama = evaluateIqamaTime(upcoming[1], iqamas.iqama[upcomingIndex].value);
+
+      upcoming.push(upcomingIqama);
+
+      res.status(200).json(upcoming);
     }
   } catch (err) {
     console.log(err);
@@ -442,10 +448,8 @@ const getPrayerObject = (prayers, iqamaArray, imamObj) => {
 const getIqamaArray = async () => {
   const docRef = doc(db, "prayers", "iqama");
   const docSnap = await getDoc(docRef);
-
   if (docSnap.exists()) {
     const iqamas = docSnap.data();
-
     return iqamas;
   } else {
     throw new Error("Iqama times not found in the database");
