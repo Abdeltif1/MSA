@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import useTheme from '../../hooks/useTheme';
 import { useQueryParams } from '../../hooks/useQueryParams';
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from '../../firebase';
 
 const NextPrayerCard = () => {
 
   const theme = useTheme();
 
   const [upcoming, setUpcoming] = useState([]);
-   const queryParams = useQueryParams();
+  const [iqama, setIqama] = useState();
+  const queryParams = useQueryParams();
 
 
   useEffect(() => {
@@ -21,13 +24,27 @@ const NextPrayerCard = () => {
 
             const response = await fetch(url);
             const result = await response.json();
-            console.log("hello");
 
 
           if (!result){
             return
           }            
 
+          setIqama(result[1]);
+          const listenIqama = (col, docu) =>{
+            const q = query(collection(db, col), where("iqama", "==", docu));
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                if (change.type === "modified") {
+                  console.log("Modified iqama: ", change.doc.data());
+                  }
+    
+              });
+        });
+        
+    
+      }
+        listenIqama('prayers', 'iqama');
         setUpcoming(result)
         }
         catch (error){
@@ -49,7 +66,7 @@ const NextPrayerCard = () => {
         <Text>{upcoming[0]}</Text>
         <Time>{upcoming[1]}</Time>
         <Text>Iqama    الإقامة</Text>
-        <Time>{upcoming[1]}</Time>
+        <Time>{iqama}</Time>
       </Card>
     </ThemeProvider>
   );

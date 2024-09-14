@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PrayerTimeCard from '../cards/PrayerTimeCard';
 import { useQueryParams } from '../../hooks/useQueryParams';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { test } from '../../helper/realTime';
 
 const Prayers = ({ isSmallScreen }) => {
 
@@ -9,10 +12,20 @@ const Prayers = ({ isSmallScreen }) => {
     const [prayers, setPrayers] = useState([]);
     const queryParams = useQueryParams();
 
-    useEffect(() => {
+    function checkDayTransition() {
 
+        const now = new Date(); 
+        const midnight = new Date();
+        midnight.setHours(24, 0, 0, 0);
+        const timeUntilMidnight = midnight.getTime() - now.getTime();
 
+        setTimeout(() => { 
+            loadNextDayPrayers();
+            checkDayTransition(); // Call again for the next day
+         },
+          timeUntilMidnight); }
 
+    function loadNextDayPrayers() {
         const fetchData = async () => {
 
             try {
@@ -22,8 +35,6 @@ const Prayers = ({ isSmallScreen }) => {
 
                 const response = await fetch(url);
                 const result = await response.json();
-                console.log(result);
-
 
                 if (!isSmallScreen) {
                     result.pop();
@@ -38,7 +49,33 @@ const Prayers = ({ isSmallScreen }) => {
 
         if (queryParams) {
             fetchData();
-        }
+    }
+}
+
+    
+
+    useEffect(() => {
+
+        const fetchFromFireBase = async () => {
+             try {
+            const docRef = doc(db, "prayers", "iqama");
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                // console.log("Document data:", docSnap.data());
+            } else {
+                console.log("No such document!");
+            }
+             } catch (error) {
+                console.log('Error fetching Iqama times:', error);
+                }
+        };
+        
+        fetchFromFireBase();
+
+
+        loadNextDayPrayers();
+        checkDayTransition();
 
 
 
