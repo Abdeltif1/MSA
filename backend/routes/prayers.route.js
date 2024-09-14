@@ -12,6 +12,9 @@ const {
     getJumaaPrayer,
     getNextPrayer,
     getImam,
+    storeMyWeeklyPrayers,
+    storeIqama,
+    getDailyData
 } = require("../api/prayers.api");
 
 
@@ -289,6 +292,135 @@ PrayerRouter.post("/storeimams", storeImams);
 PrayerRouter.post("/storedailyprayers", storeDailyPrayers);
 
 
+
+/**
+ * @swagger
+ * /api/prayers/storemyweeklyprayers:
+ *   get:
+ *     summary: Get daily prayers
+ *     description: Retrieves the daily prayers for a specific date, city, country, calculation method, and adjustment value.
+ *     parameters:
+ *       - name: date
+ *         in: query
+ *         description: The date for which to retrieve the daily prayers
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: city
+ *         in: query
+ *         description: The city for which to retrieve the daily prayers
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: country
+ *         in: query
+ *         description: The country for which to retrieve the daily prayers
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: method
+ *         in: query
+ *         description: The calculation method for prayer times
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - name: adjustment
+ *         in: query
+ *         description: The adjustment value for prayer times
+ *         required: true
+ *         schema:
+ *           type: number
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Internal server error
+ */
+
+PrayerRouter.get("/storemyweeklyprayers", storeMyWeeklyPrayers);
+
+/**
+ * @swagger
+ * /api/prayers/storeiqama:
+ *   post:
+ *     summary: Store iqama
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               prayerData:
+ *                 type: object
+ *                 description: The iqama data to be stored
+ *             example:
+ *               [
+ *                 { fajr: 5 },
+ *                 { dhuhr: 12 },
+ *                 { asr: 15 },
+ *                 { maghrib: 6 },
+ *                 { isha: 8 }
+ *               ]
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Internal server error
+ */
+
+
+PrayerRouter.post("/storeIqama", storeIqama);
+
+
+
+
+/**
+ * @swagger
+ * /api/prayers/dailydata:
+ *  get:
+ *   summary: Get Daily Prayer Data
+ *   parameters:
+ *     - name: date
+ *       in: query
+ *       description: The date for which to retrieve the upcoming prayer
+ *       required: true
+ *       schema:
+ *         type: string
+ *     - name: city
+ *       in: query
+ *       description: The city for which to retrieve the upcoming prayer
+ *       required: true
+ *       schema:
+ *         type: string
+ *     - name: country
+ *       in: query
+ *       description: The country for which to retrieve the upcoming prayer
+ *       required: true
+ *       schema:
+ *         type: string
+ *     - name: method
+ *       in: query
+ *       description: The calculation method for prayer times
+ *       required: true
+ *       schema:
+ *         type: string
+ *     - name: adjustment
+ *       in: query
+ *       description: The adjustment value for prayer times
+ *       required: true
+ *       schema:
+ *         type: number
+ *         format: double
+ *         minimum: -24
+ *         maximum: 24
+ *   responses:
+ *     200:
+ *       description: Success
+ *     500:
+ *       description: Internal server error
+ */
+
+PrayerRouter.get("/dailydata", getDailyData);
 
 
 module.exports = PrayerRouter;
