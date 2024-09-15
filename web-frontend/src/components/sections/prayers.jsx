@@ -4,12 +4,12 @@ import PrayerTimeCard from '../cards/PrayerTimeCard';
 import { useQueryParams } from '../../hooks/useQueryParams';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
-import { test } from '../../helper/realTime';
 
 const Prayers = ({ isSmallScreen }) => {
 
 
     const [prayers, setPrayers] = useState([]);
+    const [iqamas, setIqamas] = useState([]);
     const queryParams = useQueryParams();
 
     function checkDayTransition() {
@@ -90,7 +90,7 @@ const Prayers = ({ isSmallScreen }) => {
                     key={index}
                     prayer={prayer[0]}
                     time={prayer[1]}
-                    iqama={prayer[1]}
+                    iqama={prayer[2]}
 
                 />
             ))}

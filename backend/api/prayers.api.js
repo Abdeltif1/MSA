@@ -297,6 +297,11 @@ const getPrayers = async (req, res) => {
       const data = await response.json();
       const prayers = await data.data.timings;
       const prayerArray = filterPrayerTimes(prayers);
+      const iqamas = await getIqamaArray();
+      for (let i = 0; i < prayerArray.length; i++) {
+        const iqama = evaluateIqamaTime(prayerArray[i][1], iqamas.iqama[i]);
+        prayerArray[i].push(iqama);
+      }
       prayerArray.push(["Jumaa", prayerArray[1][1]]);
       res.status(200).json(prayerArray);
     }
@@ -335,7 +340,6 @@ const getUpcomingPrayer = async (req, res) => {
       const upcomingIndex = upcomingPrayerIndex(timeStampsArr, timeStamp);
       const iqamas = await getIqamaArray();
       const upcoming = prayerArray[upcomingIndex];
-      console.log(Object.values(iqamas.iqama[upcomingIndex])[0]);
       const upcomingIqama = evaluateIqamaTime(
         upcoming[1],
         iqamas.iqama[upcomingIndex]
