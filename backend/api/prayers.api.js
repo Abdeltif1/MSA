@@ -272,7 +272,6 @@ const getNextPrayer = async (req, res) => {
  * @param {day,prayer} req 
  * @param {*} res 
  */
-
 const getImam = async (req, res) => {
 
   try {
