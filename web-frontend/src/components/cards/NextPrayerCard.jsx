@@ -11,18 +11,11 @@ const NextPrayerCard = () => {
 
   const [upcoming, setUpcoming] = useState([]);
   const queryParams = useQueryParams();
+  const handleDoc = (doc) => { 
+    
+  }
 
 
-
-   
-
-    //  const listenIqama =  (col, docu) =>{
-    //         onSnapshot(doc(db, col, docu), (doc) => {
-    //           // handleDoc(doc.data());
-    //            console.log(doc.data());
-    //    });
-    //   }
-    //    listenIqama('prayers', 'iqama');
 
 
 
@@ -45,12 +38,12 @@ const NextPrayerCard = () => {
           
           
         
-      //     const listenIqama = (col, docu) =>{
-      //       onSnapshot(doc(db, col, docu), (doc) => {
-      //         handleDoc(doc.data());
-      //  });
-      // }
-      // listenIqama('prayers', 'iqama');
+          const listenIqama = (col, docu) =>{
+            onSnapshot(doc(db, col, docu), (doc) => {
+              handleDoc(doc.data());
+       });
+      }
+      listenIqama('prayers', 'iqama');
         setUpcoming(result)
         }
         catch (error){
