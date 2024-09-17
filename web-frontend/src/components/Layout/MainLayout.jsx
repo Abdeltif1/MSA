@@ -5,14 +5,11 @@ import { useQueryParams } from '../../hooks/useQueryParams';
 
 import { ThemeProvider } from 'styled-components';
 
-import Prayers from '../sections/prayers';
 
 import Head from '../sections/Head';
 import DailyPrayers from '../sections/DailyPrayers';
-import Header from '../sections/Header';
 
 import useTheme from '../../hooks/useTheme';
-
 
 
 const MainLayout = () => {
@@ -54,7 +51,6 @@ const MainLayout = () => {
 
         const response = await fetch(url);
         const result = await response.json();
-
         setPrayers(result)
       }
       catch (error) {
@@ -70,12 +66,6 @@ const MainLayout = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <Header
-        title="MSA Concordia - مصلى"
-        imam="Mohamed Mohamed"
-        date="21 August 2024, 17 Safar 1446"
-        isSmallScreen={isSmallScreen}
-      /> */}
       <Head isSmallScreen={isSmallScreen} />
       <DailyPrayers daily={prayers} />
 

@@ -44,6 +44,8 @@ const getDailyData = async (req, res) => {
 
 
       const prayerObject = getPrayerObject(prayerArray, iqamaArray.iqama, imamObj.data);
+
+
       res.status(200).send(prayerObject);
 
 
@@ -332,7 +334,9 @@ const getUpcomingPrayer = async (req, res) => {
       const iqamas = await getIqamaArray();
       const upcoming = prayerArray[upcomingIndex];
 
-      const upcomingIqama = evaluateIqamaTime(upcoming[1], iqamas.iqama[upcomingIndex].value);
+
+      // KEYS NEED TO BE CONSISTENT
+      const upcomingIqama = evaluateIqamaTime(upcoming[1], iqamas.iqama[upcomingIndex]["fajr"]);
 
       const imamObj = await getImamObject(date);
 
@@ -438,13 +442,15 @@ const getWeeklyDates = (date) => {
   return weeklyDates;
 }
 
-const getPrayerObject = (prayers, iqamaArray, imamObj) => {
+const getPrayerObject = (prayers, iqamaObj, imamObj) => {
+
+  console.log(iqamaObj);
   const prayerObject = {
-    fajr: { adan: prayers[0][1], iqama: evaluateIqamaTime(prayers[0][1], iqamaArray[0]), imam: imamObj.Fajr },
-    dhuhr: { adan: prayers[1][1], iqama: evaluateIqamaTime(prayers[1][1], iqamaArray[1]), imam: imamObj.Dhuhr },
-    asr: { adan: prayers[2][1], iqama: evaluateIqamaTime(prayers[2][1], iqamaArray[2]), imam: imamObj.Asr },
-    maghrib: { adan: prayers[3][1], iqama: evaluateIqamaTime(prayers[3][1], iqamaArray[3]), imam: imamObj.Maghrib },
-    isha: { adan: prayers[4][1], iqama: evaluateIqamaTime(prayers[4][1], iqamaArray[4]), imam: imamObj.Isha },
+    fajr: { adan: prayers[0][1], iqama: evaluateIqamaTime(prayers[0][1], iqamaObj[0].fajr), imam: imamObj.Fajr },
+    dhuhr: { adan: prayers[1][1], iqama: evaluateIqamaTime(prayers[1][1], iqamaObj[1].duhr), imam: imamObj.Dhuhr },
+    asr: { adan: prayers[2][1], iqama: evaluateIqamaTime(prayers[2][1], iqamaObj[2].asr), imam: imamObj.Asr },
+    maghrib: { adan: prayers[3][1], iqama: evaluateIqamaTime(prayers[3][1], iqamaObj[3].maghrib), imam: imamObj.Maghrib },
+    isha: { adan: prayers[4][1], iqama: evaluateIqamaTime(prayers[4][1], iqamaObj[4].isha), imam: imamObj.Isha },
   };
   return prayerObject;
 }
@@ -484,7 +490,9 @@ const evaluateIqamaTime = (prayerTime, iqama) => {
   date.setHours(hours);
   date.setMinutes(minutes);
 
-  date.setMinutes(date.getMinutes() + 5);
+
+
+  date.setMinutes(date.getMinutes() + iqama);
 
   let newHours = String(date.getHours()).padStart(2, '0');
   let newMinutes = String(date.getMinutes()).padStart(2, '0');
