@@ -2,13 +2,21 @@ import React, { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import useTheme from '../../hooks/useTheme';
 import { useQueryParams } from '../../hooks/useQueryParams';
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from '../../firebase';
 
 const NextPrayerCard = () => {
 
   const theme = useTheme();
 
   const [upcoming, setUpcoming] = useState([]);
-   const queryParams = useQueryParams();
+  const queryParams = useQueryParams();
+  const handleDoc = (doc) => { 
+    
+  }
+
+
+
 
 
   useEffect(() => {
@@ -21,13 +29,21 @@ const NextPrayerCard = () => {
 
             const response = await fetch(url);
             const result = await response.json();
-            console.log("hello");
 
 
           if (!result){
             return
           }            
 
+          
+          
+        
+          const listenIqama = (col, docu) =>{
+            onSnapshot(doc(db, col, docu), (doc) => {
+              handleDoc(doc.data());
+       });
+      }
+      listenIqama('prayers', 'iqama');
         setUpcoming(result)
         }
         catch (error){
@@ -38,6 +54,8 @@ const NextPrayerCard = () => {
     if (queryParams){
         fetchData();
     }
+   
+   
 
         
 
@@ -49,7 +67,7 @@ const NextPrayerCard = () => {
         <Text>{upcoming[0]}</Text>
         <Time>{upcoming[1]}</Time>
         <Text>Iqama    الإقامة</Text>
-        <Time>{upcoming[1]}</Time>
+        <Time>{upcoming[2]}</Time>
       </Card>
     </ThemeProvider>
   );

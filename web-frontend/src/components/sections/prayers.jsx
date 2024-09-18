@@ -2,45 +2,82 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import PrayerTimeCard from '../cards/PrayerTimeCard';
 import { useQueryParams } from '../../hooks/useQueryParams';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
 
 const Prayers = ({ isSmallScreen }) => {
 
 
     const [prayers, setPrayers] = useState([]);
+    const [iqamas, setIqamas] = useState([]);
     const queryParams = useQueryParams();
+
+    function checkDayTransition() {
+
+        const now = new Date(); 
+        const midnight = new Date();
+        midnight.setHours(24, 0, 0, 0);
+        const timeUntilMidnight = midnight.getTime() - now.getTime();
+
+        setTimeout(() => { 
+            loadNextDayPrayers();
+            checkDayTransition(); // Call again for the next day
+         },
+          timeUntilMidnight); }
+
+    function loadNextDayPrayers() {
+        const fetchData = async () => {
+
+            try {
+                const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
+                const url = `${baseUrl}dailyprayers${queryParams}`;
+
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (!isSmallScreen) {
+                    result.pop();
+                }
+
+                setPrayers(result)
+            }
+            catch (error) {
+                console.log('error:', error);
+            }
+        };
+
+        if (queryParams) {
+            fetchData();
+    }
+}
+
+    
 
     useEffect(() => {
 
-        
+        const fetchFromFireBase = async () => {
+             try {
+            const docRef = doc(db, "prayers", "iqama");
+            const docSnap = await getDoc(docRef);
 
-        const fetchData = async() => {
-
-        try{
-            const baseUrl = process.env.REACT_APP_API_BASE_URL;
-
-            const url = `${baseUrl}dailyprayers${queryParams}`;
-
-            const response = await fetch(url);
-            const result = await response.json();
-            console.log(result);
-
-
-            if (!isSmallScreen) {
-            result.pop();
+            if (docSnap.exists()) {
+                // console.log("Document data:", docSnap.data());
+            } else {
+                console.log("No such document!");
             }
-
-        setPrayers(result)
-        }
-        catch (error){
-            console.log('error:', error);
-        }
-    };
-
-    if (queryParams){
-        fetchData();
-    }
-
+             } catch (error) {
+                console.log('Error fetching Iqama times:', error);
+                }
+        };
         
+        fetchFromFireBase();
+
+
+        loadNextDayPrayers();
+        checkDayTransition();
+
+
 
     }, [isSmallScreen, queryParams]);
 
@@ -53,7 +90,7 @@ const Prayers = ({ isSmallScreen }) => {
                     key={index}
                     prayer={prayer[0]}
                     time={prayer[1]}
-                    iqama={prayer[1]}
+                    iqama={prayer[2]}
 
                 />
             ))}

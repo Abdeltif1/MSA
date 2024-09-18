@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 // import Header from '../header/Header';
 
 import { ThemeProvider } from 'styled-components';
-
+import moment from 'moment-hijri';
 import Prayers from '../sections/prayers';
 import Header from '../sections/Header';
 
@@ -12,6 +12,8 @@ import useTheme from '../../hooks/useTheme';
 
 const MainLayout = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [currentDate, setCurrentDate] = useState('');
+  const [hijriDate, setHijriDate] = useState('');
 
   const theme = useTheme();
 
@@ -33,13 +35,25 @@ const MainLayout = () => {
     return () => mediaQuery.removeEventListener('change', handleScreenWidthChange);
   }, []);
 
+  useEffect(() => {
+    const gregorianDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    const hijriDateFormatted = moment().format('iD iMMMM iYYYY');
+
+    setCurrentDate(gregorianDate);
+    setHijriDate(hijriDateFormatted);
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Header
         title="MSA Concordia - مصلى"
         time="00:00"
         imam="Mohamed Mohamed"
-        date="21 August 2024, 17 Safar 1446"
+        date={`${currentDate}, ${hijriDate}`}
         isSmallScreen={isSmallScreen}
       />
       <Prayers isSmallScreen={isSmallScreen} />
