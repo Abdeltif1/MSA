@@ -13,8 +13,9 @@ const NextPrayerCard = ({ nextPrayer }) => {
 
   useEffect(() => {
 
-
+    
     setUpcoming(nextPrayer);
+    
 
 
   }, [nextPrayer]);

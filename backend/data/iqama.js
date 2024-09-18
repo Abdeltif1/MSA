@@ -1,10 +1,10 @@
 const iqama = [
 
-    { fajr: 5 },
-    { dhuhr: 12 },
-    { asr: 15 },
-    { maghrib: 6 },
-    { isha: 8 }
+    { Fajr: 5 },
+    { Dhuhr: 12 },
+    { Asr: 15 },
+    { Maghrib: 6 },
+    { Isha: 8 }
 ];
 
 module.exports = iqama;

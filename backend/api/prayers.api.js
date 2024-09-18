@@ -39,11 +39,12 @@ const getDailyData = async (req, res) => {
       const prayerArray = filterPrayerTimes(prayers);
 
       const iqamaArray = await getIqamaArray();
+      
 
       const imamObj = await getImamObject(date);
 
 
-      const prayerObject = getPrayerObject(prayerArray, iqamaArray.iqama, imamObj.data);
+      const prayerObject = getPrayerObject(prayerArray, iqamaArray.iqama_time, imamObj.data);
 
 
       res.status(200).send(prayerObject);
@@ -151,7 +152,7 @@ const storeDailyPrayers = async (req, res) => {
 const storeImams = async (req, res) => {
 
   try {
-    // const imams = req.body;
+    const imams = req.body;
     const docRef = doc(db, "prayers", "imams");
 
     const docSnap = await getDoc(docRef);
@@ -336,7 +337,8 @@ const getUpcomingPrayer = async (req, res) => {
 
 
       // KEYS NEED TO BE CONSISTENT
-      const upcomingIqama = evaluateIqamaTime(upcoming[1], iqamas.iqama[upcomingIndex]["fajr"]);
+      console.log(iqamas.iqama_time[upcomingIndex]);
+      const upcomingIqama = evaluateIqamaTime(upcoming[1], iqamas.iqama_time[upcomingIndex][upcoming[0]]);
 
       const imamObj = await getImamObject(date);
 
@@ -347,7 +349,6 @@ const getUpcomingPrayer = async (req, res) => {
       upcoming.push(upcomingIqama);
 
       upcoming.push(imam);
-
       res.status(200).json(upcoming);
     }
   } catch (err) {
@@ -443,14 +444,14 @@ const getWeeklyDates = (date) => {
 }
 
 const getPrayerObject = (prayers, iqamaObj, imamObj) => {
-
-  console.log(iqamaObj);
+  console.log(imamObj);
+  
   const prayerObject = {
-    fajr: { adan: prayers[0][1], iqama: evaluateIqamaTime(prayers[0][1], iqamaObj[0].fajr), imam: imamObj.Fajr },
-    dhuhr: { adan: prayers[1][1], iqama: evaluateIqamaTime(prayers[1][1], iqamaObj[1].duhr), imam: imamObj.Dhuhr },
-    asr: { adan: prayers[2][1], iqama: evaluateIqamaTime(prayers[2][1], iqamaObj[2].asr), imam: imamObj.Asr },
-    maghrib: { adan: prayers[3][1], iqama: evaluateIqamaTime(prayers[3][1], iqamaObj[3].maghrib), imam: imamObj.Maghrib },
-    isha: { adan: prayers[4][1], iqama: evaluateIqamaTime(prayers[4][1], iqamaObj[4].isha), imam: imamObj.Isha },
+    fajr: { adan: prayers[0][1], iqama: evaluateIqamaTime(prayers[0][1], iqamaObj[0].Fajr), imam: imamObj.Fajr },
+    dhuhr: { adan: prayers[1][1], iqama: evaluateIqamaTime(prayers[1][1], iqamaObj[1].Dhuhr), imam: imamObj.Dhuhr },
+    asr: { adan: prayers[2][1], iqama: evaluateIqamaTime(prayers[2][1], iqamaObj[2].Asr), imam: imamObj.Asr },
+    maghrib: { adan: prayers[3][1], iqama: evaluateIqamaTime(prayers[3][1], iqamaObj[3].Maghrib), imam: imamObj.Maghrib },
+    isha: { adan: prayers[4][1], iqama: evaluateIqamaTime(prayers[4][1], iqamaObj[4].Isha), imam: imamObj.Isha },
   };
   return prayerObject;
 }

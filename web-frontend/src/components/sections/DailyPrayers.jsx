@@ -10,6 +10,7 @@ const DailyPrayers = ({ daily }) => {
 
     useEffect(() => {
         setPrayers(daily);
+        console.log(daily); 
     }, [daily]);
     return (
         <CardsContainer>

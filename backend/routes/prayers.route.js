@@ -245,10 +245,48 @@ PrayerRouter.get("/imam", getImam);
 PrayerRouter.post("/storeweeklyprayers", storeWeeklyPrayers);
 
 /**
+/**
  * @swagger
  * /api/prayers/storeimams:
  *   post:
  *     summary: Store imams
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 date:
+ *                   type: string
+ *                   description: The date for which the imams are being stored
+ *                 name:
+ *                   type: string
+ *                   description: The name of the day
+ *                 data:
+ *                   type: object
+ *                   description: The prayer times and corresponding imams
+ *                   properties:
+ *                     Fajr:
+ *                       type: string
+ *                     Dhuhr:
+ *                       type: string
+ *                     Asr:
+ *                       type: string
+ *                     Maghrib:
+ *                       type: string
+ *                     Isha:
+ *                       type: string
+ *               example:
+ *                 date: "09-14-2024"
+ *                 name: "Saturday"
+ *                 data: 
+ *                   Fajr: "Tarek Barake"
+ *                   Dhuhr: "Tarek Barake"
+ *                   Asr: "Suleiman Latrch"
+ *                   Maghrib: "Suleiman Latrch"
+ *                   Isha: "Suleiman Latrch"
  *     responses:
  *       200:
  *         description: Success

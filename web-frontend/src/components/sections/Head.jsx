@@ -6,10 +6,13 @@ import useTheme from '../../hooks/useTheme';
 import Clock from '../elements/Clock';
 import Sun from '../../assets/images';
 import { useQueryParams } from '../../hooks/useQueryParams';
+import moment from 'moment-hijri';
 
 const Head = ({ isSmallScreen }) => {
 
     const [upcoming, setUpcoming] = useState({});
+    const [hijriDate, setHijriDate] = useState('');
+    const [gregorianDate, setGregorianDate] = useState('');
 
     const queryParams = useQueryParams();
 
@@ -39,6 +42,16 @@ const Head = ({ isSmallScreen }) => {
             }
         };
 
+
+        const todayGregorian = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+        const todayHijri = moment().format('iD iMMMM iYYYY');
+        setGregorianDate(todayGregorian);
+        setHijriDate(todayHijri);
+
         if (queryParams) {
             fetchData();
         }
@@ -60,7 +73,7 @@ const Head = ({ isSmallScreen }) => {
                     <LeftSide>
                         <Text>{"MSA Concordia - مصلى"}</Text><br></br>
                         <Clock />
-                        <p>{"21 August 2024, 17 Safar 1446"}</p>
+                        <p>{gregorianDate}, {hijriDate}</p>
                         <ImamText>Imam    الامام</ImamText><br></br>
                         <Imam>{upcoming[3]}</Imam>
                     </LeftSide>
