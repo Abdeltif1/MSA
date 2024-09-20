@@ -14,7 +14,7 @@ const {
 
 const weeklyPrayers = require("../data/prayers.js");
 const imams = require("../data/imams.js");
-const iqama = require("../data/iqama.js");
+// const iqama = require("../data/iqama.js");
 const dailyPrayers = require("../data/daily.js");
 const db = getFirestore(firebase);
 
@@ -164,7 +164,7 @@ const storeImams = async (req, res) => {
     } else {
       await setDoc(docRef, { imams }, { merge: true });
     }
-    res.status(200).send("Imams are added to database");
+    res.status(200).json({message:"Imams are added to database"});
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
@@ -175,19 +175,16 @@ const storeImams = async (req, res) => {
 const storeIqama = async (req, res) => {
 
   try {
-    // const imams = req.body;
+    const iqama = req.body;
+
     const docRef = doc(db, "prayers", "iqama");
 
     const docSnap = await getDoc(docRef);
+   
+    await setDoc(docRef, { iqama_time:iqama }, { merge: true });
 
-    if (docSnap.exists()) {
-      // const existingData = docSnap.data().iqama_time || [];
-      // const updatedData = [...existingData, ...weekly_dates];
-      await setDoc(docRef, { iqama_time: iqama }, { merge: true });
-    } else {
-      await setDoc(docRef, { iqama }, { merge: true });
-    }
-    res.status(200).send("Iqama Time are added to database");
+    res.status(200).json({ message: "Iqama Time are added to the database" });
+
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
@@ -272,7 +269,6 @@ const getNextPrayer = async (req, res) => {
  * @param {day,prayer} req 
  * @param {*} res 
  */
-
 const getImam = async (req, res) => {
 
   try {
@@ -296,6 +292,11 @@ const getPrayers = async (req, res) => {
       const data = await response.json();
       const prayers = await data.data.timings;
       const prayerArray = filterPrayerTimes(prayers);
+      const iqamas = await getIqamaArray();
+      for (let i = 0; i < prayerArray.length; i++) {
+        const iqama = evaluateIqamaTime(prayerArray[i][1], iqamas.iqama[i]);
+        prayerArray[i].push(iqama);
+      }
       prayerArray.push(["Jumaa", prayerArray[1][1]]);
       res.status(200).json(prayerArray);
     }
@@ -444,14 +445,14 @@ const getWeeklyDates = (date) => {
 }
 
 const getPrayerObject = (prayers, iqamaObj, imamObj) => {
-  console.log(imamObj);
+
   
   const prayerObject = {
-    fajr: { adan: prayers[0][1], iqama: evaluateIqamaTime(prayers[0][1], iqamaObj[0].Fajr), imam: imamObj.Fajr },
-    dhuhr: { adan: prayers[1][1], iqama: evaluateIqamaTime(prayers[1][1], iqamaObj[1].Dhuhr), imam: imamObj.Dhuhr },
-    asr: { adan: prayers[2][1], iqama: evaluateIqamaTime(prayers[2][1], iqamaObj[2].Asr), imam: imamObj.Asr },
-    maghrib: { adan: prayers[3][1], iqama: evaluateIqamaTime(prayers[3][1], iqamaObj[3].Maghrib), imam: imamObj.Maghrib },
-    isha: { adan: prayers[4][1], iqama: evaluateIqamaTime(prayers[4][1], iqamaObj[4].Isha), imam: imamObj.Isha },
+    Fajr: { adan: prayers[0][1], iqama: evaluateIqamaTime(prayers[0][1], iqamaObj[0].Fajr), imam: imamObj.Fajr },
+    Dhuhr: { adan: prayers[1][1], iqama: evaluateIqamaTime(prayers[1][1], iqamaObj[1].Dhuhr), imam: imamObj.Dhuhr },
+    Asr: { adan: prayers[2][1], iqama: evaluateIqamaTime(prayers[2][1], iqamaObj[2].Asr), imam: imamObj.Asr },
+    Maghrib: { adan: prayers[3][1], iqama: evaluateIqamaTime(prayers[3][1], iqamaObj[3].Maghrib), imam: imamObj.Maghrib },
+    Isha: { adan: prayers[4][1], iqama: evaluateIqamaTime(prayers[4][1], iqamaObj[4].Isha), imam: imamObj.Isha },
   };
   return prayerObject;
 }
@@ -471,8 +472,9 @@ const getIqamaArray = async () => {
 const getImamObject = async (day) => {
   const docRef = doc(db, "prayers", "imams");
   const docSnap = await getDoc(docRef);
-
+  
   if (docSnap.exists()) {
+    
     const imams = docSnap.data();
 
     const imamObjectForDate = findItem(imams.weekly_imams, day);
@@ -486,6 +488,7 @@ const getImamObject = async (day) => {
 }
 
 const evaluateIqamaTime = (prayerTime, iqama) => {
+  // const iqamaTime = Object.values(iqama)[0];
   const [hours, minutes] = prayerTime.split(":").map(Number);
   let date = new Date();
   date.setHours(hours);

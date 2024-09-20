@@ -17,6 +17,8 @@ const Head = ({ isSmallScreen }) => {
     const queryParams = useQueryParams();
 
 
+    const theme = useTheme();
+
     useEffect(() => {
         const fetchData = async () => {
 
@@ -33,8 +35,6 @@ const Head = ({ isSmallScreen }) => {
                     return
                 }
 
-
-
                 setUpcoming(result)
             }
             catch (error) {
@@ -42,27 +42,30 @@ const Head = ({ isSmallScreen }) => {
             }
         };
 
-
-        const todayGregorian = new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-        const todayHijri = moment().format('iD iMMMM iYYYY');
-        setGregorianDate(todayGregorian);
-        setHijriDate(todayHijri);
-
-        if (queryParams) {
+        if(queryParams){
             fetchData();
         }
-
-
+     
 
     }, [queryParams]);
 
 
 
-    const theme = useTheme();
+
+
+    useEffect(()=>{
+ 
+          const todayGregorian = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        const todayHijri = moment().format('iD iMMMM iYYYY');
+        setGregorianDate(todayGregorian);
+        setHijriDate(todayHijri);
+      
+            
+    }, []);
 
     return (
         <ThemeProvider theme={theme}>

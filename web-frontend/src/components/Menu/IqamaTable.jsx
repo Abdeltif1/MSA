@@ -1,23 +1,53 @@
 import React, { useState } from "react";
-import { CDBTable, CDBTableHeader, CDBTableBody, CDBContainer, CDBBtn } from "cdbreact";
+import {
+  CDBTable,
+  CDBTableHeader,
+  CDBTableBody,
+  CDBContainer,
+  CDBBtn,
+} from "cdbreact";
 
 export default function IqamaImamTable() {
   const [iqamaTimes, setIqamaTimes] = useState([
-    { fajr: 5 },
-    { dhuhr: 5 },
-    { asr: 5 },
-    { maghrib: 5 },
-    { isha: 5 },
+    { Fajr: 5 },
+    { Dhuhr: 5 },
+    { Asr: 5 },
+    { Maghrib: 5 },
+    { Isha: 5 },
   ]);
 
   const handleIqamaTime = (choice, index) => {
     const selectedTime = parseInt(choice.target.value);
     setIqamaTimes((prevTimes) => {
       const updatedTimes = [...prevTimes];
-      const key = Object.keys(updatedTimes[index])[0];  
-      updatedTimes[index] = { [key]: selectedTime };  
-      return updatedTimes; 
+      const key = Object.keys(updatedTimes[index])[0];
+      updatedTimes[index] = { [key]: selectedTime };
+
+      return updatedTimes;
     });
+  };
+
+  const storeIqamaTime = async () => {
+    try {
+      const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
+      const url = `${baseUrl}storeIqama`;
+
+      const response = await fetch(url, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify(iqamaTimes), 
+      });
+      
+      const result = await response.json();
+
+      
+      alert(result.message)
+    } catch (error) {
+      console.log("error:", error);
+    }
   };
 
   return (
@@ -31,11 +61,13 @@ export default function IqamaImamTable() {
         </CDBTableHeader>
         <CDBTableBody>
           {iqamaTimes.map((item, index) => {
-            const prayer = Object.keys(item)[0]; 
+            const prayer = Object.keys(item)[0];
             return (
               <tr key={index}>
                 <td>
-                  <strong>{prayer.charAt(0).toUpperCase() + prayer.slice(1)}</strong>
+                  <strong>
+                    {prayer.charAt(0).toUpperCase() + prayer.slice(1)}
+                  </strong>
                 </td>
                 <td>
                   <select
@@ -57,7 +89,7 @@ export default function IqamaImamTable() {
       </CDBTable>
 
       <div style={{ marginTop: "20px", textAlign: "center" }}>
-        <CDBBtn color="primary" onClick={() => console.log(iqamaTimes)}>
+        <CDBBtn color="primary" onClick={() => {storeIqamaTime()}}>
           Submit Iqama Times
         </CDBBtn>
       </div>

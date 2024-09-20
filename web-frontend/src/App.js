@@ -1,33 +1,23 @@
-import MainLayout from "./components/Layout/MainLayout";
-
-import { createGlobalStyle, ThemeProvider } from 'styled-components';
-
-import useTheme from './hooks/useTheme';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AdminPage } from './pages/AdminPage/AdminPage';
+import { PrayerPage } from './pages/PrayerPage';
+import ImamManagement from './pages/AdminPage/ImamManagement'; // No curly braces
+import WelcomePage from './pages/AdminPage/WelcomePage';
+import IqamaManagement from './pages/AdminPage/IqamaManagement';
 
 function App() {
-
-  const theme = useTheme();
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <MainLayout />
-    </ThemeProvider>
-
+    <Router>
+      <Routes>
+        <Route path="/" element={<PrayerPage />} />
+        <Route path="/admin" element={<AdminPage />}>
+          <Route path="" element = {<WelcomePage/>}/>
+          <Route path="imam-management" element={<ImamManagement />} />
+          <Route path="iqama-management" element={<IqamaManagement />} />
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    background: ${({ theme }) => theme.globalBackground};
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    margin: 0;
-    padding: 0;
-
-
-  }
-`;
 export default App;
-
-

@@ -1,8 +1,8 @@
 import React from "react";
-import IqamaImamTable from "../../components/Menu/ImamTable";
+import IqamaTable from "../../components/Menu/IqamaTable";
 import styled from "styled-components";
 
-const IqamaImamTableStyled = styled(IqamaImamTable)`
+const IqamaTableStyled = styled(IqamaTable)`
   flex: 1; /* Take up remaining space */
   display: flex;
   justify-content: center; /* Center content horizontally */
@@ -10,10 +10,10 @@ const IqamaImamTableStyled = styled(IqamaImamTable)`
   padding: 20px; /* Optional: padding for the table */
 `;
 
-export default function ImamManagement() {
+export default function IqamaManagement() {
   return (
     <div>
-      <IqamaImamTableStyled />
+      <IqamaTableStyled />
     </div>
   );
 }

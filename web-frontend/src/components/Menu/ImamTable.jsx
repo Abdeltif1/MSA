@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CDBTable,
   CDBTableHeader,
@@ -8,108 +8,57 @@ import {
   CDBInput
 } from "cdbreact";
 
+import useWeeklyCalendar from "../../hooks/useWeeklyCalendar";
+
 export default function IqamaImamTable() {
-  const week = [
-    {
-      date: "15-09-2024",
-      name: "Sunday",
-      data: {
-        fajr: { Adan: "05:00", Iqama: "05:10", Imam: "Suleiman Latrch" },
-        dhuhr: { Adan: "12:00", Iqama: "13:15", Imam: "Suleiman Latrch" },
-        asr: { Adan: "03:00", Iqama: "03:15", Imam: "Suleiman Latrch" },
-        maghrib: { Adan: "06:00", Iqama: "06:15", Imam: "Suleiman Latrch" },
-        isha: { Adan: "08:00", Iqama: "08:15", Imam: "Suleiman Latrch" },
-      },
-    },
-    {
-      "16-09-2024": {
-        name: "Monday",
-        Prayers: {
-          Fajr: { Adan: "05:00", Iqama: "05:10", Imam: "Suleiman Latrch" },
-          Dhuhr: { Adan: "12:00", Iqama: "13:15", Imam: "Suleiman Latrch" },
-          Asr: { Adan: "03:00", Iqama: "03:15", Imam: "Suleiman Latrch" },
-          Maghrib: { Adan: "06:00", Iqama: "06:15", Imam: "Suleiman Latrch" },
-          Isha: { Adan: "08:00", Iqama: "08:15", Imam: "Suleiman Latrch" },
-        },
-      },
-    },
-    {
-      date: "17-09-2024",
-      name: "Tuesday",
-      data: {
-        Fajr: { Adan: "05:00", Iqama: "05:10", Imam: "Badr Moussa" },
-        Dhuhr: { Adan: "12:00", Iqama: "12:15", Imam: "Badr Moussa" },
-        Asr: { Adan: "03:00", Iqama: "03:15", Imam: "Badr Moussa" },
-        Maghrib: { Adan: "06:00", Iqama: "06:15", Imam: "Badr Moussa" },
-        Isha: { Adan: "08:00", Iqama: "08:15", Imam: "Badr Moussa" },
-      },
-    },
-    {
-      date: "18-10-2024",
-      name: "Wednesday",
-      data: {
-        Fajr: { Adan: "05:00", Iqama: "05:10", Imam: "Mohamed Saidi" },
-        Dhuhr: { Adan: "12:00", Iqama: "12:15", Imam: "Mohamed Saidi" },
-        Asr: { Adan: "03:00", Iqama: "03:15", Imam: "Mohamed Saidi" },
-        Maghrib: { Adan: "06:00", Iqama: "06:15", Imam: "Mohamed Saidi" },
-        Isha: { Adan: "08:00", Iqama: "08:15", Imam: "Mohamed Saidi" },
-      },
-    },
-    {
-      date: "19-10-2024",
-      name: "Thursaday",
-      data: {
-        Fajr: { Adan: "05:00", Iqama: "05:10", Imam: "Mohamed Saidi" },
-        Dhuhr: { Adan: "12:00", Iqama: "12:15", Imam: "Mohamed Saidi" },
-        Asr: { Adan: "03:00", Iqama: "03:15", Imam: "Mohamed Saidi" },
-        Maghrib: { Adan: "06:00", Iqama: "06:15", Imam: "Mohamed Saidi" },
-        Isha: { Adan: "08:00", Iqama: "08:15", Imam: "Mohamed Saidi" },
-      },
-    },
-    {
-      date: "20-10-2024",
-      name: "Friday",
-      data: {
-        Fajr: { Adan: "05:00", Iqama: "05:10", Imam: "Mohamed Saidi" },
-        Dhuhr: {
-          Adan: "12:00",
-          Iqama: "12:15",
-          Imam: "Mohamed Saidi",
-          Khutba: "13:00",
-        },
-        Asr: { Adan: "03:00", Iqama: "03:15", Imam: "Mohamed Saidi" },
-        Maghrib: { Adan: "06:00", Iqama: "06:15", Imam: "Mohamed Saidi" },
-        Isha: { Adan: "08:00", Iqama: "08:15", Imam: "Mohamed Saidi" },
-      },
-    },
-    {
-      date: "21-10-2024",
-      name: "Saturday",
-      data: {
-        Fajr: { Adan: "05:00", Iqama: "05:10", Imam: "Mohamed Saidi" },
-        Dhuhr: { Adan: "12:00", Iqama: "12:15", Imam: "Mohamed Saidi" },
-        Asr: { Adan: "03:00", Iqama: "03:15", Imam: "Mohamed Saidi" },
-        Maghrib: { Adan: "06:00", Iqama: "06:15", Imam: "Mohamed Saidi" },
-        Isha: { Adan: "08:00", Iqama: "08:15", Imam: "Mohamed Saidi" },
-      },
-    },
-  ];
+  const weekly = useWeeklyCalendar();
+  const prayers = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
-  const prayers = ["fajr", "Duhr", "Asr", "Maghrib", "Ishaa"];
-  const daysOfWeek = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Satuday",
-  ];
-
+  const [myWeek, setMyWeek] = useState([]);
   const [currentWeek, setCurrentWeek] = useState(0);
 
   const nextWeek = () => setCurrentWeek(currentWeek + 1);
   const prevWeek = () => setCurrentWeek(currentWeek - 1);
+
+  useEffect(() => {
+    setMyWeek(weekly);
+  }, [weekly]);
+
+
+
+    // Update the value of a specific prayer for a specific day
+    const handleInputChange = (dayIndex, prayer, value) => {
+      setMyWeek(prevState =>
+        prevState.map((day, i) =>
+          i === dayIndex ? { ...day, data: { ...day.data, [prayer]: value } } : day
+        )
+      );
+    };
+  // Handle form submission
+  const handleSubmit = async () => {
+
+    try{
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
+    const url = `${baseUrl}storeimams`;
+
+    const response =  await fetch(url, {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json', 
+      },
+      body: JSON.stringify(myWeek), 
+    });
+    
+    const result = await response.json();
+
+    
+    alert(result.message)
+  } catch (error) {
+    console.log("error:", error);
+  }
+  };
+
 
   return (
     <CDBContainer>
@@ -136,23 +85,24 @@ export default function IqamaImamTable() {
         <CDBTableHeader>
           <tr>
             <th>#</th>
-            {daysOfWeek.map((day, index) => (
-              <th key={index}>{day}</th>
+            {prayers.map((prayer, index) => (
+              <th key={index}>{prayer}</th>
             ))}
           </tr>
         </CDBTableHeader>
         <CDBTableBody>
-          {prayers.map((prayer, index) => (
+          {myWeek.map((day, index) => (
             <tr key={index}>
               <td>
-                <strong>{prayer}</strong>
+                <strong>{day.name}<br /> {day.date}</strong>
               </td>
-              {daysOfWeek.map((day) => (
-                <td key={day}>
+              {prayers.map((prayer, i) => (
+                <td key={i}>
                   <div>
-                    <p>Adhan: </p>
                     <label>
-                      Imam: <CDBInput background color="primary" type="text" />
+                      Imam: <CDBInput background color="primary" type="text" value={day.data[prayer]}  onChange={(e) =>
+                          handleInputChange(index, prayer, e.target.value)
+                        } />
                     </label>
                   </div>
                 </td>
@@ -161,6 +111,9 @@ export default function IqamaImamTable() {
           ))}
         </CDBTableBody>
       </CDBTable>
+      <CDBBtn color="primary" onClick={handleSubmit}>
+        Submit
+      </CDBBtn>
     </CDBContainer>
   );
 }
