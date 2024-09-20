@@ -15,10 +15,6 @@ export default function IqamaImamTable() {
   const prayers = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
   const [myWeek, setMyWeek] = useState([]);
-  const [currentWeek, setCurrentWeek] = useState(0);
-
-  const nextWeek = () => setCurrentWeek(currentWeek + 1);
-  const prevWeek = () => setCurrentWeek(currentWeek - 1);
 
   useEffect(() => {
     setMyWeek(weekly);
@@ -62,25 +58,7 @@ export default function IqamaImamTable() {
 
   return (
     <CDBContainer>
-      <h3>Imam for week {currentWeek + 1}</h3>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "150px",
-        }}
-      >
-        <CDBBtn
-          color="secondary"
-          onClick={prevWeek}
-          disabled={currentWeek === 0}
-        >
-          Previous
-        </CDBBtn>
-        <CDBBtn color="secondary" onClick={nextWeek}>
-          Next
-        </CDBBtn>
-      </div>
+      <h3>Imams for this week:</h3>
       <CDBTable bordered>
         <CDBTableHeader>
           <tr>
