@@ -2,19 +2,21 @@
 const express = require("express");
 
 const {
-    getPrayers,
-    getJumaah,
-    getUpcomingPrayer,
-    storeWeeklyPrayers,
-    storeImams,
-    storeDailyPrayers,
-    getDailyPrayers,
-    getJumaaPrayer,
-    getNextPrayer,
-    getImam,
-    storeMyWeeklyPrayers,
-    storeIqama,
-    getDailyData
+  getImams,
+  getPrayers,
+
+  getUpcomingPrayer,
+  storeWeeklyPrayers,
+  storeImams,
+  storeDailyPrayers,
+  getDailyPrayers,
+  getJumaaPrayer,
+  getNextPrayer,
+  getImam,
+  storeMyWeeklyPrayers,
+  storeIqama,
+  getDailyData,
+  storeJumaaPrayer,
 } = require("../api/prayers.api");
 
 
@@ -65,52 +67,6 @@ const PrayerRouter = express.Router();
  */
 
 PrayerRouter.get("/dailyprayers", getPrayers);
-
-/**
- * @swagger
- * /api/prayers/jumaahprayer:
- *   get:
- *     summary: Get Jumaah prayer
- *     parameters:
- *       - name: date
- *         in: query
- *         description: The date for which to retrieve the Jumaah prayer
- *         required: true
- *         schema:
- *           type: string
- *       - name: city
- *         in: query
- *         description: The city for which to retrieve the Jumaah prayer
- *         required: true
- *         schema:
- *           type: string
- *       - name: country
- *         in: query
- *         description: The country for which to retrieve the Jumaah prayer
- *         required: true
- *         schema:
- *           type: string
- *       - name: method
- *         in: query
- *         description: The calculation method for prayer times
- *         required: true
- *         schema:
- *           type: string
- *       - name: adjustment
- *         in: query
- *         description: The adjustment value for prayer times
- *         required: true
- *         schema:
- *           type: number
- *     responses:
- *       200:
- *         description: Success
- *       500:
- *         description: Internal server error
- */
-
-PrayerRouter.get("/jumaahprayer", getJumaah);
-
 
 /**
  * @swagger
@@ -189,6 +145,20 @@ PrayerRouter.get("/nextprayer", getNextPrayer);
 
 PrayerRouter.get("/jumaaprayer", getJumaaPrayer);
 
+
+/**
+ * @swagger
+ * /api/prayers/imams:
+ *   get:
+ *     summary: Get imams
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Internal server error
+ */
+
+PrayerRouter.get("/imams", getImams);
 
 /**
  * @swagger
@@ -408,6 +378,34 @@ PrayerRouter.get("/storemyweeklyprayers", storeMyWeeklyPrayers);
 
 
 PrayerRouter.post("/storeIqama", storeIqama);
+
+
+/**
+ * @swagger
+ * /api/prayers/storeiqama:
+ *   post:
+ *     summary: Store iqama
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               prayerData:
+ *                 type: object
+ *                 description: The iqama data to be stored
+ *             example:
+ *               {khutba: "12:30", imam: "Walid"}
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Internal server error
+ */
+
+
+PrayerRouter.post("/storejumaa", storeJumaaPrayer);
+
 
 
 

@@ -19,6 +19,25 @@ const dailyPrayers = require("../data/daily.js");
 const db = getFirestore(firebase);
 
 
+
+const getImams = async (req, res) => {
+  console.log("getImams")
+
+ try {
+   const docRef = doc(db, "prayers", "imams");
+   const response = await getDoc(docRef);
+    const imams = response.data().weekly_imams;
+    console.log(imams)
+   res.status(200).json(  imams );
+ } catch (err) {
+   console.log(err);
+   res.status(500).json({ message: err.message });
+ }
+
+
+}
+
+
 /**
  * get daily prayers from the API and set iqama an imam
  * @param {*} req 
@@ -221,15 +240,28 @@ const getDailyPrayers = async (req, res) => {
  */
 const getJumaaPrayer = async (req, res) => {
   try {
-    const docRef = doc(db, "prayers", "daily");
+    const docRef = doc(db, "prayers", "jumaa");
     const response = await getDoc(docRef);
-    const jumaa = response.data().Jumaa;
-    res.status(200).send(jumaa);
+    const jumaa = response.data();
+    console.log(jumaa);
+    res.status(200).json(jumaa);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
   }
 
+};
+
+const storeJumaaPrayer = async (req, res) => {
+  try {
+    const jumaaPrayer = req.body;
+    const docRef = doc(db, "prayers", "jumaa");
+    await setDoc(docRef, jumaaPrayer, { merge: true });
+    res.status(200).json({message: "Jumaa prayer added to database"});
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
 };
 
 /**
@@ -306,20 +338,6 @@ const getPrayers = async (req, res) => {
   }
 };
 
-const getJumaah = async (req, res) => {
-  try {
-    const { date, city, country, method, adjustment } = req.query;
-    const apiUrl = `${process.env.PRAYER_URL_API}/${date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
-    const response = await fetch(apiUrl);
-    if (response.ok) {
-      const data = await response.json();
-      const jumaa = await data.data.timings.Dhuhr;
-      res.status(200).json(jumaa);
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
 
 const getUpcomingPrayer = async (req, res) => {
   try {
@@ -521,9 +539,9 @@ const findItem = (arr, target) => {
 
 
 module.exports = {
+  getImams,
   getPrayers,
   getUpcomingPrayer,
-  getJumaah,
   storeWeeklyPrayers,
   storeImams,
   storeDailyPrayers,
@@ -533,5 +551,6 @@ module.exports = {
   getImam,
   storeMyWeeklyPrayers,
   storeIqama,
-  getDailyData
+  getDailyData,
+  storeJumaaPrayer,
 };

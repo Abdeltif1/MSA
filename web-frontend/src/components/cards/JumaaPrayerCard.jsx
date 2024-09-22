@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { useQueryParams } from '../../hooks/useQueryParams';
+
 
 import useTheme from '../../hooks/useTheme';
 const JumaaPrayerCard = () => {
@@ -8,8 +8,8 @@ const JumaaPrayerCard = () => {
 
     const theme = useTheme();
 
-    const [jumaa, setJumaa] = useState("");
-    const queryParams = useQueryParams();
+    const [jumaa, setJumaa] = useState({});
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -17,13 +17,12 @@ const JumaaPrayerCard = () => {
             try {
                 const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
-                const url = `${baseUrl}jumaahprayer${queryParams}`;
+                const url = `${baseUrl}jumaaprayer`;
+
+                console.log('url:', url);
 
                 const response = await fetch(url);
                 const result = await response.json();
-
-
-
 
                 setJumaa(result)
             }
@@ -32,21 +31,16 @@ const JumaaPrayerCard = () => {
             }
         };
 
-        if (queryParams) {
             fetchData();
-        }
-
-
-
-    }, [queryParams]);
+    }, []);
 
     return (
         <ThemeProvider theme={theme}>
             <Card>
-                <Text>Jumaa</Text>
-                <TimeText>{jumaa}</TimeText>
-                <Text>Iqama  الإقامة</Text>
-                <TimeText>{jumaa}</TimeText>
+                <Text>Jumaa </Text>
+                <TimeText>{jumaa.khutba}</TimeText>
+                <Text>Imam</Text>
+                <TimeText>{jumaa.imam}</TimeText>
             </Card>
         </ThemeProvider>
     );
