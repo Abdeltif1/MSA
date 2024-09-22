@@ -4,6 +4,7 @@ import { PrayerPage } from './pages/PrayerPage';
 import ImamManagement from './pages/AdminPage/ImamManagement'; // No curly braces
 import WelcomePage from './pages/AdminPage/WelcomePage';
 import IqamaManagement from './pages/AdminPage/IqamaManagement';
+import JumaaTime from './components/Menu/JumaaTime';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="" element = {<WelcomePage/>}/>
           <Route path="imam-management" element={<ImamManagement />} />
           <Route path="iqama-management" element={<IqamaManagement />} />
+          <Route path="jumaa-management" element={<JumaaTime/>}/>
         </Route>
       </Routes>
     </Router>

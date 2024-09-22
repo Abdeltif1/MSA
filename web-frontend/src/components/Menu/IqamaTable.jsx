@@ -14,6 +14,7 @@ export default function IqamaImamTable() {
     { Asr: 5 },
     { Maghrib: 5 },
     { Isha: 5 },
+    { Jumaa: 5 },
   ]);
 
   const handleIqamaTime = (choice, index) => {
@@ -34,24 +35,25 @@ export default function IqamaImamTable() {
       const url = `${baseUrl}storeIqama`;
 
       const response = await fetch(url, {
-        method: 'POST', 
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json', 
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(iqamaTimes), 
+        body: JSON.stringify(iqamaTimes),
       });
-      
+
       const result = await response.json();
 
-      
-      alert(result.message)
+      alert(result.message);
     } catch (error) {
       console.log("error:", error);
     }
   };
 
   return (
+    
     <CDBContainer>
+      <h1>Iqama Management</h1>
       <CDBTable bordered>
         <CDBTableHeader>
           <tr>
@@ -89,7 +91,12 @@ export default function IqamaImamTable() {
       </CDBTable>
 
       <div style={{ marginTop: "20px", textAlign: "center" }}>
-        <CDBBtn color="primary" onClick={() => {storeIqamaTime()}}>
+        <CDBBtn
+          color="primary"
+          onClick={() => {
+            storeIqamaTime();
+          }}
+        >
           Submit Iqama Times
         </CDBBtn>
       </div>

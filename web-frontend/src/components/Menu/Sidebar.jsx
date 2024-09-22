@@ -30,8 +30,8 @@ export default function Sidebar() {
             <NavLink exact to="/admin/iqama-management" activeClassName="activeClicked">
               <CDBSidebarMenuItem icon="user">Iqama Management</CDBSidebarMenuItem>
             </NavLink>
-            <NavLink exact to="/analytics" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="chart-line">To be added</CDBSidebarMenuItem>
+            <NavLink exact to="/admin/jumaa-management" activeClassName="activeClicked">
+              <CDBSidebarMenuItem icon="chart-line">Jumaa Management</CDBSidebarMenuItem>
             </NavLink>
 
             <NavLink exact to="/hero404" target="_blank" activeClassName="activeClicked">
