@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CDBTable,
   CDBTableHeader,
@@ -7,15 +7,28 @@ import {
   CDBBtn,
 } from "cdbreact";
 
+
 export default function IqamaImamTable() {
-  const [iqamaTimes, setIqamaTimes] = useState([
-    { Fajr: 5 },
-    { Dhuhr: 5 },
-    { Asr: 5 },
-    { Maghrib: 5 },
-    { Isha: 5 },
-    { Jumaa: 5 },
-  ]);
+  const [iqamaTimes, setIqamaTimes] = useState([]);
+
+  useEffect(() => { 
+    const fetchData = async () => {
+      try {
+        const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
+        const url = `${baseUrl}iqama`;
+        const response = await fetch(url);
+        const result = await response.json();
+        console.log(result);
+        setIqamaTimes(result);
+      } catch (error) {
+        console.log("error:", error);
+      }
+    };
+
+    fetchData();
+
+  }, []);
 
   const handleIqamaTime = (choice, index) => {
     const selectedTime = parseInt(choice.target.value);

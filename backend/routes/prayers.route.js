@@ -4,7 +4,7 @@ const express = require("express");
 const {
   getImams,
   getPrayers,
-
+    getIqama,
   getUpcomingPrayer,
   storeWeeklyPrayers,
   storeImams,
@@ -129,6 +129,21 @@ PrayerRouter.get("/upcomingprayer", getUpcomingPrayer);
 
 
 PrayerRouter.get("/nextprayer", getNextPrayer);
+
+/**
+ * @swagger
+ * /api/prayers/nextprayer:
+ *   get:
+ *     summary: Get next prayer
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Internal server error
+ */
+
+
+PrayerRouter.get("/iqama", getIqama);
 
 
 /**

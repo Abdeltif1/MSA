@@ -21,13 +21,12 @@ const db = getFirestore(firebase);
 
 
 const getImams = async (req, res) => {
-  console.log("getImams")
+
 
  try {
    const docRef = doc(db, "prayers", "imams");
    const response = await getDoc(docRef);
     const imams = response.data().weekly_imams;
-    console.log(imams)
    res.status(200).json(  imams );
  } catch (err) {
    console.log(err);
@@ -35,6 +34,24 @@ const getImams = async (req, res) => {
  }
 
 
+}
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
+const getIqama = async (req, res) => {
+
+  try {
+    const docRef = doc(db, "prayers", "iqama");
+    const response = await getDoc(docRef);
+    const iqama = response.data().iqama_time;
+    res.status(200).json(iqama);
+  }
+  catch(err){
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
 }
 
 
@@ -65,9 +82,7 @@ const getDailyData = async (req, res) => {
 
       const prayerObject = getPrayerObject(prayerArray, iqamaArray.iqama_time, imamObj.data);
 
-
       res.status(200).send(prayerObject);
-
 
     }
   } catch (err) {
@@ -243,7 +258,6 @@ const getJumaaPrayer = async (req, res) => {
     const docRef = doc(db, "prayers", "jumaa");
     const response = await getDoc(docRef);
     const jumaa = response.data();
-    console.log(jumaa);
     res.status(200).json(jumaa);
   } catch (err) {
     console.log(err);
@@ -354,9 +368,6 @@ const getUpcomingPrayer = async (req, res) => {
       const iqamas = await getIqamaArray();
       const upcoming = prayerArray[upcomingIndex];
 
-
-      // KEYS NEED TO BE CONSISTENT
-      console.log(iqamas.iqama_time[upcomingIndex]);
       const upcomingIqama = evaluateIqamaTime(upcoming[1], iqamas.iqama_time[upcomingIndex][upcoming[0]]);
 
       const imamObj = await getImamObject(date);
@@ -553,4 +564,5 @@ module.exports = {
   storeIqama,
   getDailyData,
   storeJumaaPrayer,
+  getIqama,
 };
