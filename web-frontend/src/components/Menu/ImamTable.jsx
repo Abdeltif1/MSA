@@ -58,7 +58,7 @@ export default function IqamaImamTable() {
 
   return (
     <CDBContainer>
-      <h3>Imams for this week:</h3>
+      <h1>Weekly Imam Management</h1>
       <CDBTable bordered>
         <CDBTableHeader>
           <tr>
