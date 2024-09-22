@@ -1,6 +1,6 @@
 {
   "name": "msa-web-app",
-  "homepage": " https://sohaibdm.github.io/msa-web-app",
+
   "version": "0.1.0",
   "private": true,
   "dependencies": {
