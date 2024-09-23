@@ -17,8 +17,7 @@ const MainLayout = () => {
   const [prayers, setPrayers] = useState(null);
   const queryParams = useQueryParams();
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [currentDate, setCurrentDate] = useState('');
-  const [hijriDate, setHijriDate] = useState('');
+
 
   const theme = useTheme();
 

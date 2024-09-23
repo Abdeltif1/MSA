@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Sidebar from "../../components/Menu/Sidebar";
-import IqamaImamTable from "../../components/Menu/ImamTable";
+
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
-import { browserSessionPersistence, signOut, signInWithEmailAndPassword } from "firebase/auth";
+import { browserSessionPersistence, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -18,13 +18,7 @@ const SidebarStyled = styled(Sidebar)`
   padding: 20px; /* Optional: padding for the sidebar */
 `;
 
-const IqamaImamTableStyled = styled(IqamaImamTable)`
-  flex: 1; /* Take up remaining space */
-  display: flex;
-  justify-content: center; /* Center content horizontally */
-  align-items: center; /* Center content vertically */
-  padding: 20px; /* Optional: padding for the table */
-`;
+
 
 const ContentArea = styled.div`
   flex: 1; /* Take up remaining space */
@@ -76,10 +70,11 @@ export const AdminPage = () => {
       await auth.setPersistence(browserSessionPersistence);
       await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
-      setError("Authentication failed. Please try again.");
+      console.log(err);
+      setError("authentication failed");
     }
   };
-  
+
 
   if (loading) {
     return <div>Loading...</div>;
