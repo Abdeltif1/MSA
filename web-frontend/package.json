@@ -1,17 +1,29 @@
 {
   "name": "msa-web-app",
-  "homepage": " https://sohaibdm.github.io/msa-web-app/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/material": "^6.1.1",
+    "@mui/x-date-pickers": "^7.18.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "bootstrap": "^5.3.3",
+    "cdbreact": "^1.5.19",
+    "dayjs": "^1.11.13",
+    "firebase": "^10.13.1",
     "gh-pages": "^6.1.1",
+    "moment-hijri": "^2.30.0",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
+    "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
+    "react-firebase-hooks": "^5.1.1",
+    "react-router-dom": "^6.26.2",
     "react-scripts": "5.0.1",
+    "react-time-picker": "^7.0.0",
     "styled-components": "^6.1.12",
     "web-vitals": "^2.1.4"
   },
@@ -40,5 +52,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }

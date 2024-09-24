@@ -13,6 +13,5 @@ bundle.js
 npm-debug.log
 /.idea
 /public
-.
-backend/
+
 

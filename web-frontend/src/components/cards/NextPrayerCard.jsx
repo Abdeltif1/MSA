@@ -1,47 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import useTheme from '../../hooks/useTheme';
-import { useQueryParams } from '../../hooks/useQueryParams';
 
-const NextPrayerCard = () => {
+
+const NextPrayerCard = ({ nextPrayer }) => {
 
   const theme = useTheme();
 
   const [upcoming, setUpcoming] = useState([]);
-   const queryParams = useQueryParams();
+
 
 
   useEffect(() => {
- const fetchData = async() => {
 
-        try{
-            const baseUrl = process.env.REACT_APP_API_BASE_URL;
-
-            const url = `${baseUrl}upcomingprayer${queryParams}`;
-
-            const response = await fetch(url);
-            const result = await response.json();
-            console.log("hello");
+    
+    setUpcoming(nextPrayer);
+    
 
 
-          if (!result){
-            return
-          }            
-
-        setUpcoming(result)
-        }
-        catch (error){
-            console.log('error:', error);
-        }
-    };
-
-    if (queryParams){
-        fetchData();
-    }
-
-        
-
-    }, [queryParams]);
+  }, [nextPrayer]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -49,7 +26,7 @@ const NextPrayerCard = () => {
         <Text>{upcoming[0]}</Text>
         <Time>{upcoming[1]}</Time>
         <Text>Iqama    الإقامة</Text>
-        <Time>{upcoming[1]}</Time>
+        <Time>{upcoming[2]}</Time>
       </Card>
     </ThemeProvider>
   );
