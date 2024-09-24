@@ -8,8 +8,9 @@ const DailyPrayers = ({ daily }) => {
     const [prayers, setPrayers] = useState(null);
 
     useEffect(() => {
+        console.log(daily);
         setPrayers(daily);
-        console.log(daily); 
+
     }, [daily]);
     return (
         <CardsContainer>

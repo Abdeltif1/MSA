@@ -1,7 +1,4 @@
 
-
-
-
 const express = require('express');
 
 const cors = require('cors');
@@ -9,6 +6,8 @@ const cors = require('cors');
 const { specs, swaggerUi } = require('./swagger');
 
 const PrayerRouter = require('./routes/prayers.route.js');
+
+const EventRouter = require('./routes/events.route.js');
 
 const config = require('./config.js');
 
@@ -26,6 +25,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/prayers", PrayerRouter);
+
+app.use("/api/events", EventRouter);
 
 
 
