@@ -10,28 +10,25 @@ const {
   updateDoc,
   deleteDoc,
   setDoc,
-} = require('firebase/firestore');;
+} = require('firebase/firestore');
 
 const weeklyPrayers = require("../data/prayers.js");
-const imams = require("../data/imams.js");
-// const iqama = require("../data/iqama.js");
-const dailyPrayers = require("../data/daily.js");
+
+
 const db = getFirestore(firebase);
-
-
 
 const getImams = async (req, res) => {
 
 
- try {
-   const docRef = doc(db, "prayers", "imams");
-   const response = await getDoc(docRef);
+  try {
+    const docRef = doc(db, "prayers", "imams");
+    const response = await getDoc(docRef);
     const imams = response.data().weekly_imams;
-   res.status(200).json(  imams );
- } catch (err) {
-   console.log(err);
-   res.status(500).json({ message: err.message });
- }
+    res.status(200).json(imams);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: err.message });
+  }
 
 
 }
@@ -48,7 +45,7 @@ const getIqama = async (req, res) => {
     const iqama = response.data().iqama_time;
     res.status(200).json(iqama);
   }
-  catch(err){
+  catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
   }
@@ -75,7 +72,7 @@ const getDailyData = async (req, res) => {
       const prayerArray = filterPrayerTimes(prayers);
 
       const iqamaArray = await getIqamaArray();
-      
+
 
       const imamObj = await getImamObject(date);
 
@@ -198,7 +195,7 @@ const storeImams = async (req, res) => {
     } else {
       await setDoc(docRef, { imams }, { merge: true });
     }
-    res.status(200).json({message:"Imams are added to database"});
+    res.status(200).json({ message: "Imams are added to database" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
@@ -214,8 +211,8 @@ const storeIqama = async (req, res) => {
     const docRef = doc(db, "prayers", "iqama");
 
     const docSnap = await getDoc(docRef);
-   
-    await setDoc(docRef, { iqama_time:iqama }, { merge: true });
+
+    await setDoc(docRef, { iqama_time: iqama }, { merge: true });
 
     res.status(200).json({ message: "Iqama Time are added to the database" });
 
@@ -271,7 +268,7 @@ const storeJumaaPrayer = async (req, res) => {
     const jumaaPrayer = req.body;
     const docRef = doc(db, "prayers", "jumaa");
     await setDoc(docRef, jumaaPrayer, { merge: true });
-    res.status(200).json({message: "Jumaa prayer added to database"});
+    res.status(200).json({ message: "Jumaa prayer added to database" });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
@@ -475,7 +472,7 @@ const getWeeklyDates = (date) => {
 
 const getPrayerObject = (prayers, iqamaObj, imamObj) => {
 
-  
+
   const prayerObject = {
     Fajr: { adan: prayers[0][1], iqama: evaluateIqamaTime(prayers[0][1], iqamaObj[0].Fajr), imam: imamObj.Fajr },
     Dhuhr: { adan: prayers[1][1], iqama: evaluateIqamaTime(prayers[1][1], iqamaObj[1].Dhuhr), imam: imamObj.Dhuhr },
@@ -501,9 +498,9 @@ const getIqamaArray = async () => {
 const getImamObject = async (day) => {
   const docRef = doc(db, "prayers", "imams");
   const docSnap = await getDoc(docRef);
-  
+
   if (docSnap.exists()) {
-    
+
     const imams = docSnap.data();
 
     const imamObjectForDate = findItem(imams.weekly_imams, day);
