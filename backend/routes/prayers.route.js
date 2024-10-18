@@ -3,17 +3,17 @@ const express = require("express");
 
 const {
   getImams,
-  getPrayers,
-    getIqama,
+  // getPrayers,
+  getIqama,
   getUpcomingPrayer,
-  storeWeeklyPrayers,
+  // storeWeeklyPrayers,
   storeImams,
-  storeDailyPrayers,
+  // storeDailyPrayers,
   getDailyPrayers,
   getJumaaPrayer,
-  getNextPrayer,
+  // getNextPrayer,
   getImam,
-  storeMyWeeklyPrayers,
+  // storeMyWeeklyPrayers,
   storeIqama,
   getDailyData,
   storeJumaaPrayer,
@@ -66,7 +66,7 @@ const PrayerRouter = express.Router();
  *         description: Internal server error
  */
 
-PrayerRouter.get("/dailyprayers", getPrayers);
+// PrayerRouter.get("/dailyprayers", getPrayers);
 
 /**
  * @swagger
@@ -128,7 +128,7 @@ PrayerRouter.get("/upcomingprayer", getUpcomingPrayer);
  */
 
 
-PrayerRouter.get("/nextprayer", getNextPrayer);
+// PrayerRouter.get("/nextprayer", getNextPrayer);
 
 /**
  * @swagger
@@ -227,7 +227,7 @@ PrayerRouter.get("/imam", getImam);
  *         description: Internal server error
  */
 
-PrayerRouter.post("/storeweeklyprayers", storeWeeklyPrayers);
+// PrayerRouter.post("/storeweeklyprayers", storeWeeklyPrayers);
 
 /**
 /**
@@ -312,7 +312,7 @@ PrayerRouter.post("/storeimams", storeImams);
  *         description: Internal server error
  */
 
-PrayerRouter.post("/storedailyprayers", storeDailyPrayers);
+// PrayerRouter.post("/storedailyprayers", storeDailyPrayers);
 
 
 
@@ -360,7 +360,7 @@ PrayerRouter.post("/storedailyprayers", storeDailyPrayers);
  *         description: Internal server error
  */
 
-PrayerRouter.get("/storemyweeklyprayers", storeMyWeeklyPrayers);
+// PrayerRouter.get("/storemyweeklyprayers", storeMyWeeklyPrayers);
 
 /**
  * @swagger

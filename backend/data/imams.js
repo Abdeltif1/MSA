@@ -37,7 +37,7 @@ const imams = [
         },
     },
     {
-        date: "09-17-2024",
+        date: "10-18-2024",
         name: "Tuesday",
         data: {
             "Fajr": "Mohamed Saidi",
