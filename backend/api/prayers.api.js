@@ -12,7 +12,8 @@ const {
   setDoc,
 } = require('firebase/firestore');
 
-const weeklyPrayers = require("../data/prayers.js");
+
+
 
 
 const db = getFirestore(firebase);
@@ -89,90 +90,90 @@ const getDailyData = async (req, res) => {
 
 };
 
+// /**
+//  * Store weekly prayers in the database
+//  * @param {*} req 
+//  * @param {*} res 
+//  */
+// const storeMyWeeklyPrayers = async (req, res) => {
+
+//   try {
+//     const { date, city, country, method, adjustment } = req.query;
+//     const apiUrl = `${process.env.PRAYER_URL_API}/${weekly_dates[i].date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
+//     const weekly_dates = getWeeklyDates(date);
+
+//     for (let i = 0; i < weekly_dates.length; i++) {
+//       const apiUrl = `${process.env.PRAYER_URL_API}/${weekly_dates[i].date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
+//       const response = await fetch(apiUrl);
+//       if (response.ok) {
+//         const data = await response.json();
+
+//         const prayers = await data.data.timings;
+
+//         const prayerArray = filterPrayerTimes(prayers);
+
+//         const prayerObject = getPrayerObject(prayerArray);
+
+//         weekly_dates[i].data = prayerObject;
+//         if (weekly_dates[i].day === "Friday") {
+//           weekly_dates[i].data.dhuhr.Khutba = "13:20";
+//         }
+//       }
+//     }
+
+//     const docRef = doc(db, "prayers", "my_week");
+//     const docSnap = await getDoc(docRef);
+//     if (docSnap.exists()) {
+//       const existingData = docSnap.data().weekly_dates || [];
+//       // const updatedData = [...existingData, ...weekly_dates];
+//       await setDoc(docRef, { weekly_dates: weekly_dates }, { merge: true });
+//     } else {
+//       await setDoc(docRef, { weekly_dates }, { merge: true });
+//     }
+//     res.status(200).send("Prayers added to database");
+
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: err.message });
+//   }
+// }
+
 /**
  * Store weekly prayers in the database
  * @param {*} req 
  * @param {*} res 
  */
-const storeMyWeeklyPrayers = async (req, res) => {
-
-  try {
-    const { date, city, country, method, adjustment } = req.query;
-    const apiUrl = `${process.env.PRAYER_URL_API}/${weekly_dates[i].date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
-    const weekly_dates = getWeeklyDates(date);
-
-    for (let i = 0; i < weekly_dates.length; i++) {
-      const apiUrl = `${process.env.PRAYER_URL_API}/${weekly_dates[i].date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
-      const response = await fetch(apiUrl);
-      if (response.ok) {
-        const data = await response.json();
-
-        const prayers = await data.data.timings;
-
-        const prayerArray = filterPrayerTimes(prayers);
-
-        const prayerObject = getPrayerObject(prayerArray);
-
-        weekly_dates[i].data = prayerObject;
-        if (weekly_dates[i].day === "Friday") {
-          weekly_dates[i].data.dhuhr.Khutba = "13:20";
-        }
-      }
-    }
-
-    const docRef = doc(db, "prayers", "my_week");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const existingData = docSnap.data().weekly_dates || [];
-      // const updatedData = [...existingData, ...weekly_dates];
-      await setDoc(docRef, { weekly_dates: weekly_dates }, { merge: true });
-    } else {
-      await setDoc(docRef, { weekly_dates }, { merge: true });
-    }
-    res.status(200).send("Prayers added to database");
-
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err.message });
-  }
-}
-
-/**
- * Store weekly prayers in the database
- * @param {*} req 
- * @param {*} res 
- */
-const storeWeeklyPrayers = async (req, res) => {
-  try {
-    const docRef = doc(db, "prayers", "weekly");
-    await setDoc(docRef, weeklyPrayers, { merge: true });
-    res.status(200).send("Prayers added to database");
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err.message });
-  }
-};
+// const storeWeeklyPrayers = async (req, res) => {
+//   try {
+//     const docRef = doc(db, "prayers", "weekly");
+//     await setDoc(docRef, weeklyPrayers, { merge: true });
+//     res.status(200).send("Prayers added to database");
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: err.message });
+//   }
+// };
 
 /**
  * store daily prayers in the database
  * @param {*} req 
  * @param {*} res 
  */
-const storeDailyPrayers = async (req, res) => {
-  try {
+// const storeDailyPrayers = async (req, res) => {
+//   try {
 
-    // const daily = dailyPrayers ;
-    const prayers = req.body;
-    const docRef = doc(db, "prayers", "daily");
-    // await setDoc(docRef, daily, { merge: true });
-    await setDoc(docRef, prayers, { merge: true });
+//     // const daily = dailyPrayers ;
+//     const prayers = req.body;
+//     const docRef = doc(db, "prayers", "daily");
+//     // await setDoc(docRef, daily, { merge: true });
+//     await setDoc(docRef, prayers, { merge: true });
 
-    res.status(200).send("Prayers added to database");
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err.message });
-  }
-};
+//     res.status(200).send("Prayers added to database");
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: err.message });
+//   }
+// };
 
 /**
  * Store imams in the database.
@@ -280,31 +281,31 @@ const storeJumaaPrayer = async (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getNextPrayer = async (req, res) => {
+// const getNextPrayer = async (req, res) => {
 
-  try {
-    const docRef = doc(db, "prayers", "daily");
+//   try {
+//     const docRef = doc(db, "prayers", "daily");
 
-    const response = await getDoc(docRef);
+//     const response = await getDoc(docRef);
 
-    const prayerArray = convertObjectToArray(response.data());
+//     const prayerArray = convertObjectToArray(response.data());
 
-    //remove jumaa from the array
-    prayerArray.pop();
+//     //remove jumaa from the array
+//     prayerArray.pop();
 
-    const timeStampsArr = getArrayOfTimeStamps(prayerArray);
+//     const timeStampsArr = getArrayOfTimeStamps(prayerArray);
 
-    const timeStamp = getCurrentTimestamp();
+//     const timeStamp = getCurrentTimestamp();
 
-    const upcomingIndex = upcomingPrayerIndex(timeStampsArr, timeStamp);
+//     const upcomingIndex = upcomingPrayerIndex(timeStampsArr, timeStamp);
 
-    res.status(200).json(prayerArray[upcomingIndex]);
+//     res.status(200).json(prayerArray[upcomingIndex]);
 
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err.message });
-  }
-};
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: err.message });
+//   }
+// };
 
 
 /**
@@ -326,28 +327,30 @@ const getImam = async (req, res) => {
   }
 };
 
-const getPrayers = async (req, res) => {
-  try {
-    const { date, city, country, method, adjustment } = req.query;
-    const apiUrl = `${process.env.PRAYER_URL_API}/${date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
-    const response = await fetch(apiUrl);
-    if (response.ok) {
-      const data = await response.json();
-      const prayers = await data.data.timings;
-      const prayerArray = filterPrayerTimes(prayers);
-      const iqamas = await getIqamaArray();
-      for (let i = 0; i < prayerArray.length; i++) {
-        const iqama = evaluateIqamaTime(prayerArray[i][1], iqamas.iqama[i]);
-        prayerArray[i].push(iqama);
-      }
-      prayerArray.push(["Jumaa", prayerArray[1][1]]);
-      res.status(200).json(prayerArray);
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: err.message });
-  }
-};
+// const getPrayers = async (req, res) => {
+//   try {
+//     const { date, city, country, method, adjustment } = req.query;
+//     const apiUrl = `${process.env.PRAYER_URL_API}/${date}?city=${city}&country=${country}&method=${method}&adjustment=${adjustment}`;
+//     const response = await fetch(apiUrl);
+//     if (response.ok) {
+//       const data = await response.json();
+//       const prayers = await data.data.timings;
+//       const prayerArray = filterPrayerTimes(prayers);
+//       const iqamas = await getIqamaArray();
+//       for (let i = 0; i < prayerArray.length; i++) {
+
+//         console.log(iqamas);
+//         const iqama = evaluateIqamaTime(prayerArray[i][1], iqamas.iqama_time[i]);
+//         prayerArray[i].push(iqama);
+//       }
+//       prayerArray.push(["Jumaa", prayerArray[1][1]]);
+//       res.status(200).json(prayerArray);
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: err.message });
+//   }
+// };
 
 
 const getUpcomingPrayer = async (req, res) => {
@@ -363,11 +366,13 @@ const getUpcomingPrayer = async (req, res) => {
       const timeStamp = getCurrentTimestamp();
       const upcomingIndex = upcomingPrayerIndex(timeStampsArr, timeStamp);
       const iqamas = await getIqamaArray();
+
       const upcoming = prayerArray[upcomingIndex];
 
       const upcomingIqama = evaluateIqamaTime(upcoming[1], iqamas.iqama_time[upcomingIndex][upcoming[0]]);
 
       const imamObj = await getImamObject(date);
+
 
       const imam = imamObj.data[upcoming[0]];
 
@@ -376,6 +381,7 @@ const getUpcomingPrayer = async (req, res) => {
       upcoming.push(upcomingIqama);
 
       upcoming.push(imam);
+
       res.status(200).json(upcoming);
     }
   } catch (err) {
@@ -441,36 +447,10 @@ const convertObjectToArray = (obj) => {
   return arr;
 }
 
-const getArrayOfTimeStamps = (timeStrings) => {
 
-
-  return timeStrings.map((timeString) => {
-    const [hours, minutes] = timeString[1].Iqama.split(":").map(Number);
-
-    const now = new Date();
-
-    now.setHours(hours, minutes, 0, 0);
-
-    return now.getTime();
-  });
-};
-
-const getWeeklyDates = (date) => {
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const weeklyDates = [];
-  const today = new Date(date);
-
-  const day = today.getDay();
-
-  for (let i = 0; i < 7; i++) {
-    const nextDay = new Date(today);
-    nextDay.setDate(today.getDate() + i);
-    weeklyDates.push({ date: nextDay.toISOString().split("T")[0], day: days[(day + i) % 7] });
-  }
-  return weeklyDates;
-}
 
 const getPrayerObject = (prayers, iqamaObj, imamObj) => {
+
 
 
   const prayerObject = {
@@ -515,6 +495,8 @@ const getImamObject = async (day) => {
 
 const evaluateIqamaTime = (prayerTime, iqama) => {
   // const iqamaTime = Object.values(iqama)[0];
+  // console.log(prayerTime);
+  // console.log(iqama);
   const [hours, minutes] = prayerTime.split(":").map(Number);
   let date = new Date();
   date.setHours(hours);
@@ -548,16 +530,16 @@ const findItem = (arr, target) => {
 
 module.exports = {
   getImams,
-  getPrayers,
+  // getPrayers,
   getUpcomingPrayer,
-  storeWeeklyPrayers,
+  // storeWeeklyPrayers,
   storeImams,
-  storeDailyPrayers,
+  // storeDailyPrayers,
   getDailyPrayers,
   getJumaaPrayer,
-  getNextPrayer,
+  // getNextPrayer,
   getImam,
-  storeMyWeeklyPrayers,
+  // storeMyWeeklyPrayers,
   storeIqama,
   getDailyData,
   storeJumaaPrayer,
